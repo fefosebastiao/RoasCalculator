@@ -6,7 +6,6 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { calculatorSchema, CalculatorFormData, CalculatorResults } from "@shared/schema";
 import { industryOptions } from "@/data/industryBenchmarks";
-import chartIcon from "../assets/chart-icon.png";
 
 import {
   Form,
@@ -33,10 +32,12 @@ const Calculator = () => {
   const form = useForm<CalculatorFormData>({
     resolver: zodResolver(calculatorSchema),
     defaultValues: {
-      adSpend: undefined,
-      revenue: undefined,
       industry: "",
-      channel: ""
+      monthlySales: undefined,
+      averageSaleValue: undefined,
+      monthlyLeads: undefined,
+      adSpend: undefined,
+      revenue: undefined
     },
   });
 
@@ -77,7 +78,7 @@ const Calculator = () => {
                       name="adSpend"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Investimento Mensal em Anúncios (R$)</FormLabel>
+                          <FormLabel>Investimento mensal (R$)</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -102,7 +103,7 @@ const Calculator = () => {
                       name="revenue"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Receita Mensal (R$)</FormLabel>
+                          <FormLabel>Receita mensal (R$)</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -127,7 +128,7 @@ const Calculator = () => {
                       name="industry"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Setor ou Tipo de Negócio</FormLabel>
+                          <FormLabel>Qual é o seu setor?</FormLabel>
                           <Select 
                             onValueChange={field.onChange} 
                             defaultValue={field.value}
@@ -150,64 +151,61 @@ const Calculator = () => {
                     
                     <FormField
                       control={form.control}
-                      name="channel"
+                      name="monthlySales"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Principal Canal de Anúncios</FormLabel>
+                          <FormLabel>Quantas vendas seu negócio faz no mês?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="grid grid-cols-2 gap-4"
-                            >
-                              <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="google" id="channel-google" className="sr-only peer" />
-                                </FormControl>
-                                <FormLabel className="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary-50 w-full">
-                                  <svg className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.46 8.12l-1.19-.24c-.2-.04-.26-.13-.26-.27V9.38c0-.13.07-.21.14-.11l1.26 1.33c.06.06.08.18-.07.28-.15.11-.11.21.12.24zm-12.33.11l1.26-1.33c.07-.09.14-.02.14.11v.23c0 .14-.06.23-.26.27l-1.19.24c-.23-.03-.19-.13-.07-.24.12-.1.11-.22.12-.28zM12 18.76c-1.63 0-3.12-.58-4.29-1.53l3.28-3.28c.74.73 1.73 1.19 2.82 1.19s2.08-.46 2.82-1.19l3.28 3.28c-1.17.95-2.66 1.53-4.29 1.53zm-6.76-4.29l3.28-3.28c.73.74 1.19 1.73 1.19 2.82s-.46 2.08-1.19 2.82l-3.28-3.28c-.01-.03-.01-.05 0-.08zm13.52 0c.01.03.01.05 0 .08l-3.28 3.28c-.73-.74-1.19-1.73-1.19-2.82s.46-2.08 1.19-2.82l3.28 3.28z" />
-                                  </svg>
-                                  <span className="text-sm">Google Ads</span>
-                                </FormLabel>
-                              </FormItem>
-                              
-                              <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="facebook" id="channel-facebook" className="sr-only peer" />
-                                </FormControl>
-                                <FormLabel className="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary-50 w-full">
-                                  <svg className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-                                  </svg>
-                                  <span className="text-sm">Facebook Ads</span>
-                                </FormLabel>
-                              </FormItem>
-                              
-                              <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="instagram" id="channel-instagram" className="sr-only peer" />
-                                </FormControl>
-                                <FormLabel className="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary-50 w-full">
-                                  <svg className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 1.802c-2.67 0-2.986.01-4.04.059-.976.045-1.505.207-1.858.344-.466.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.055-.059 1.37-.059 4.04 0 2.67.01 2.986.059 4.04.045.976.207 1.505.344 1.858.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.047 1.37.059 4.04.059 2.67 0 2.987-.01 4.04-.059.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.047-1.055.059-1.37.059-4.04 0-2.67-.01-2.986-.059-4.04-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 0 0-.748-1.15 3.098 3.098 0 0 0-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.055-.047-1.37-.059-4.04-.059M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.802a3.198 3.198 0 1 0 0 6.396 3.198 3.198 0 0 0 0-6.396zm6.244-3.036a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z" />
-                                  </svg>
-                                  <span className="text-sm">Instagram Ads</span>
-                                </FormLabel>
-                              </FormItem>
-                              
-                              <FormItem className="flex items-center space-x-3 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="other" id="channel-other" className="sr-only peer" />
-                                </FormControl>
-                                <FormLabel className="flex items-center p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 transition-all peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary-50 w-full">
-                                  <svg className="h-5 w-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                                  </svg>
-                                  <span className="text-sm">Outros</span>
-                                </FormLabel>
-                              </FormItem>
-                            </RadioGroup>
+                            <Input 
+                              placeholder="50" 
+                              type="number" 
+                              {...field} 
+                              onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="averageSaleValue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Qual é o valor médio de uma venda? (R$)</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span className="text-gray-500 sm:text-sm">R$</span>
+                              </div>
+                              <Input 
+                                placeholder="400" 
+                                type="number" 
+                                className="pl-10"
+                                {...field} 
+                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="monthlyLeads"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Quantos compradores entram em contato por mês?</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="150" 
+                              type="number" 
+                              {...field} 
+                              onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
