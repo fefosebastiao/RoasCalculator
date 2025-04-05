@@ -485,7 +485,7 @@ const Calculator = () => {
                   <div className="flex items-start space-x-3 mb-4">
                     <LightbulbIcon className="h-6 w-6 text-yellow-500 mt-1 flex-shrink-0" />
                     <div>
-                      <h4 className="text-lg font-bold text-gray-800 mb-2">Análise Personalizada</h4>
+                      <h4 className="text-lg font-bold text-gray-800 mb-2">Insights Financeiros com IA</h4>
                       <div className="text-gray-600 prose prose-sm max-w-none">
                         {results.analysis.includes('##') 
                           ? <div dangerouslySetInnerHTML={{ 
