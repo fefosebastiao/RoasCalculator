@@ -169,7 +169,10 @@ const Calculator = () => {
                                 placeholder="50" 
                                 type="number" 
                                 {...field} 
-                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                  field.onChange(value);
+                                }}
                               />
                             </FormControl>
                             <FormMessage />
@@ -195,7 +198,10 @@ const Calculator = () => {
                                   type="number" 
                                   className="pl-10"
                                   {...field} 
-                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                  onChange={(e) => {
+                                    const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                    field.onChange(value);
+                                  }}
                                 />
                               </div>
                             </FormControl>
@@ -217,7 +223,10 @@ const Calculator = () => {
                                 placeholder="150" 
                                 type="number" 
                                 {...field} 
-                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                  field.onChange(value);
+                                }}
                               />
                             </FormControl>
                             <FormMessage />
@@ -243,7 +252,10 @@ const Calculator = () => {
                                   type="number" 
                                   className="pl-10"
                                   {...field} 
-                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                  onChange={(e) => {
+                                    const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                    field.onChange(value);
+                                  }}
                                 />
                               </div>
                             </FormControl>
@@ -270,7 +282,10 @@ const Calculator = () => {
                                   type="number" 
                                   className="pl-10"
                                   {...field} 
-                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                  onChange={(e) => {
+                                    const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                    field.onChange(value);
+                                  }}
                                 />
                               </div>
                             </FormControl>
