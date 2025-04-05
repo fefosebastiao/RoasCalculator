@@ -133,7 +133,7 @@ const Calculator = () => {
                         name="industry"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Qual é o seu setor?</FormLabel>
+                            <FormLabel>Em qual setor seu negócio atua?</FormLabel>
                             <Select 
                               onValueChange={field.onChange} 
                               defaultValue={field.value}
@@ -250,10 +250,10 @@ const Calculator = () => {
                         name="monthlySales"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Quantas vendas ou conversões por mês sua empresa faz?</FormLabel>
+                            <FormLabel>Quantas vendas ou conversões por mês sua empresa realiza?</FormLabel>
                             <FormControl>
                               <Input 
-                                placeholder="50" 
+                                placeholder="Você pode usar uma estimativa ou valor médio mensal" 
                                 type="number" 
                                 {...field} 
                                 onChange={(e) => {
