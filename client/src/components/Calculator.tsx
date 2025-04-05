@@ -239,11 +239,48 @@ const Calculator = () => {
                 {!results ? (
                   <div className="text-center">
                     <div className="rounded-lg mx-auto mb-6 shadow-md bg-white h-48 flex items-center justify-center">
-                      <img 
-                        src={chartIcon} 
-                        alt="Gráfico ROAS" 
-                        className="max-w-full max-h-full p-4" 
-                      />
+                      <svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+                        {/* Eixos do gráfico */}
+                        <line x1="20" y1="100" x2="160" y2="100" stroke="#718096" strokeWidth="2" />
+                        <line x1="20" y1="20" x2="20" y2="100" stroke="#718096" strokeWidth="2" />
+                        
+                        {/* Setas nos eixos */}
+                        <polygon points="160,100 155,95 155,105" fill="#718096" />
+                        <polygon points="20,20 15,25 25,25" fill="#718096" />
+                        
+                        {/* Linhas de grade */}
+                        <line x1="20" y1="80" x2="160" y2="80" stroke="#E2E8F0" strokeWidth="1" />
+                        <line x1="20" y1="60" x2="160" y2="60" stroke="#E2E8F0" strokeWidth="1" />
+                        <line x1="20" y1="40" x2="160" y2="40" stroke="#E2E8F0" strokeWidth="1" />
+                        
+                        <line x1="55" y1="20" x2="55" y2="100" stroke="#E2E8F0" strokeWidth="1" />
+                        <line x1="90" y1="20" x2="90" y2="100" stroke="#E2E8F0" strokeWidth="1" />
+                        <line x1="125" y1="20" x2="125" y2="100" stroke="#E2E8F0" strokeWidth="1" />
+                        
+                        {/* Linha de tendência ROAS crescente */}
+                        <path d="M 30,90 L 55,75 L 90,55 L 125,35 L 150,25" 
+                              stroke="currentColor" 
+                              strokeWidth="3" 
+                              fill="none" 
+                        />
+                        
+                        {/* Pontos na linha */}
+                        <circle cx="30" cy="90" r="4" fill="currentColor" />
+                        <circle cx="55" cy="75" r="4" fill="currentColor" />
+                        <circle cx="90" cy="55" r="4" fill="currentColor" />
+                        <circle cx="125" cy="35" r="4" fill="currentColor" />
+                        <circle cx="150" cy="25" r="4" fill="currentColor" />
+                        
+                        {/* Legenda dos eixos */}
+                        <text x="170" y="100" fontSize="10" fill="#718096">Investimento</text>
+                        <text x="20" y="10" fontSize="10" fill="#718096">Retorno</text>
+                        
+                        {/* Área preenchida sob a curva */}
+                        <path d="M 30,90 L 55,75 L 90,55 L 125,35 L 150,25 L 150,100 L 30,100 Z" 
+                              fill="currentColor" 
+                              fillOpacity="0.1" 
+                        />
+                      </svg>
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-3">Descubra o potencial do seu ROAS</h3>
                     <p className="text-gray-600 mb-6">Preencha o formulário ao lado para calcular seu ROAS atual e receber insights personalizados para melhorar seus resultados.</p>
