@@ -41,18 +41,18 @@ export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
 
 export const calculatorSchema = z.object({
-  industry: z.string().min(1, "Insira um valor válido: selecione um setor"),
-  monthlySales: z.number().min(1, "Insira um valor válido: o número deve ser maior que zero"),
-  averageSaleValue: z.number().min(1, "Insira um valor válido: o valor deve ser maior que zero"),
-  monthlyLeads: z.number().min(1, "Insira um valor válido: o número deve ser maior que zero"),
-  adSpend: z.number().min(1, "Insira um valor válido: o valor deve ser maior que zero"),
-  revenue: z.number().min(1, "Insira um valor válido: o valor deve ser maior que zero"),
+  industry: z.string().min(1, "Selecione um setor"),
+  monthlySales: z.number().min(1, "O número de vendas deve ser maior que zero"),
+  averageSaleValue: z.number().min(1, "O valor médio de venda deve ser maior que zero"),
+  monthlyLeads: z.number().min(1, "O número de compradores deve ser maior que zero"),
+  adSpend: z.number().min(1, "Investimento deve ser maior que zero"),
+  revenue: z.number().min(1, "Receita deve ser maior que zero"),
 });
 
 export type CalculatorFormData = z.infer<typeof calculatorSchema>;
 
 export const leadSchema = calculatorSchema.extend({
-  email: z.string().email("Insira um valor válido: formato de email inválido"),
+  email: z.string().email("Email inválido"),
   channel: z.string().optional().default("website"),
 });
 
