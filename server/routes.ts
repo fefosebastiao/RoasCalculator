@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertLeadSchema, calculatorSchema, leadSchema } from "@shared/schema";
+import { generateROASAnalysis } from "./openai";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -20,7 +21,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         adSpend: validatedData.adSpend,
         revenue: validatedData.revenue,
         industry: validatedData.industry,
-        channel: validatedData.channel,
+        channel: "website", // Default channel
         calculatedRoas: roas.toFixed(2),
         createdAt: new Date().toISOString(),
       });
@@ -58,25 +59,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const benchmark = industryBenchmarks[validatedData.industry] || 3.5;
       
-      // Generate analysis
-      let analysis = "";
+      // Generate basic analysis (fallback if OpenAI fails)
+      let basicAnalysis = "";
       if (roas < benchmark * 0.8) {
-        analysis = `Seu ROAS está abaixo da média para o setor (${benchmark.toFixed(1)}x). Considere revisar suas estratégias de segmentação e criativo para melhorar a eficiência.`;
+        basicAnalysis = `Seu ROAS está abaixo da média para o setor (${benchmark.toFixed(1)}x). Considere revisar suas estratégias de segmentação e criativo para melhorar a eficiência.`;
       } else if (roas >= benchmark * 0.8 && roas <= benchmark * 1.2) {
-        analysis = `Seu ROAS está dentro da média para o setor (${benchmark.toFixed(1)}x). Continue otimizando suas campanhas para maximizar o retorno.`;
+        basicAnalysis = `Seu ROAS está dentro da média para o setor (${benchmark.toFixed(1)}x). Continue otimizando suas campanhas para maximizar o retorno.`;
       } else {
-        analysis = `Seu ROAS está acima da média para o setor (${benchmark.toFixed(1)}x). Considere aumentar gradualmente seu orçamento publicitário para escalar seus resultados mantendo a eficiência.`;
+        basicAnalysis = `Seu ROAS está acima da média para o setor (${benchmark.toFixed(1)}x). Considere aumentar gradualmente seu orçamento publicitário para escalar seus resultados mantendo a eficiência.`;
       }
 
       // Calculate percentage of benchmark (for the indicator)
       const percentOfBenchmark = Math.min(Math.max((roas / (benchmark * 2)) * 100, 5), 100);
       
-      res.json({
-        roas,
-        benchmark,
-        analysis,
-        percentOfBenchmark
-      });
+      // Generate AI-powered personalized analysis
+      try {
+        // Create data object for OpenAI
+        const analysisData = {
+          ...validatedData,
+          roas,
+          benchmark,
+          monthlySales: validatedData.monthlySales || 0,
+          averageSaleValue: validatedData.averageSaleValue || 0,
+          monthlyLeads: validatedData.monthlyLeads || 0
+        };
+        
+        // Get AI analysis
+        const aiAnalysis = await generateROASAnalysis(analysisData);
+        
+        res.json({
+          roas,
+          benchmark,
+          analysis: aiAnalysis || basicAnalysis,
+          percentOfBenchmark
+        });
+      } catch (aiError) {
+        console.error("Error generating AI analysis:", aiError);
+        // Fallback to basic analysis if AI fails
+        res.json({
+          roas,
+          benchmark,
+          analysis: basicAnalysis,
+          percentOfBenchmark
+        });
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
