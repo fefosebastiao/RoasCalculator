@@ -10,6 +10,11 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { NumericInput } from "./NumericInput";
 import { CustomFormMessage } from "@/components/ui/custom-form-message";
 
+interface CalculatorProps {
+  onResultsShow?: () => void;
+  onCalculatorReset?: () => void;
+}
+
 import {
   Form,
   FormControl,
@@ -28,11 +33,18 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, LightbulbIcon, ArrowRight } from "lucide-react";
 
-const Calculator = () => {
+const Calculator = ({ onResultsShow, onCalculatorReset }: CalculatorProps) => {
   const [results, setResults] = useState<CalculatorResults | null>(null);
   const [step, setStep] = useState(1);
   const totalSteps = 5;
   const { toast } = useToast();
+  
+  // Notificar o componente pai quando os resultados são exibidos ou redefinidos
+  useEffect(() => {
+    if (results && onResultsShow) {
+      onResultsShow();
+    }
+  }, [results, onResultsShow]);
 
   // Estado para rastrear quando os campos foram tocados
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({
@@ -82,6 +94,15 @@ const Calculator = () => {
   const prevStep = () => {
     if (step > 1) {
       setStep(step - 1);
+    }
+  };
+  
+  const resetCalculator = () => {
+    setResults(null);
+    setStep(1);
+    form.reset();
+    if (onCalculatorReset) {
+      onCalculatorReset();
     }
   };
   
@@ -505,11 +526,81 @@ const Calculator = () => {
                 </CardContent>
               </Card>
               
-              <div className="text-center">
-                <Button className="inline-flex items-center justify-center">
-                  Fale com um especialista
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+              <div className="text-center mt-8">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={resetCalculator} 
+                    className="inline-flex items-center justify-center"
+                  >
+                    Calcular Novamente
+                  </Button>
+                  <Button 
+                    className="inline-flex items-center justify-center"
+                    asChild
+                  >
+                    <a href="https://wa.me/seunumero" target="_blank" rel="noopener noreferrer">
+                      Fale com um especialista
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                </div>
+                
+                {/* Seção de CTA dentro do componente Calculator quando os resultados estão visíveis */}
+                <div className="mt-12">
+                  <Card className="shadow-lg border-gray-200">
+                    <CardContent className="p-8 flex flex-col items-center">
+                      <div className="text-center">
+                        <span className="text-sm uppercase text-primary font-medium">A CONTA PARA QUEM PRECISA VENDER</span>
+                        
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 my-4">
+                          Lucre mais com nossa tecnologia: Maquininha, Tap e Link de Pagamento
+                        </h2>
+                        
+                        <p className="text-gray-600 mb-8">
+                          Receba na hora ou em 1 dia útil com taxas a partir de:
+                        </p>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-8">
+                        <div className="bg-gray-50 p-4 rounded-md text-center">
+                          <p className="text-2xl font-bold text-primary">0,00%</p>
+                          <p className="text-sm text-gray-500">no Pix</p>
+                        </div>
+                        
+                        <div className="bg-gray-50 p-4 rounded-md text-center">
+                          <p className="text-2xl font-bold text-primary">0,75%</p>
+                          <p className="text-sm text-gray-500">no Débito</p>
+                        </div>
+                        
+                        <div className="bg-gray-50 p-4 rounded-md text-center">
+                          <p className="text-2xl font-bold text-primary">2,69%</p>
+                          <p className="text-sm text-gray-500">no Crédito 1x</p>
+                        </div>
+                        
+                        <div className="bg-gray-50 p-4 rounded-md text-center">
+                          <p className="text-2xl font-bold text-primary">8,99%</p>
+                          <p className="text-sm text-gray-500">no Crédito 12x</p>
+                        </div>
+                      </div>
+                      
+                      <div className="text-center mb-6">
+                        <p className="text-gray-500 line-through">De: 12x de R$ 79,90</p>
+                        <p className="text-xl font-bold">por: <span className="text-primary">12x de R$ 16,58</span> ou <span className="text-primary">R$ 199</span> pela Maquininha Smart com Pix grátis, conta digital e suporte RA1000</p>
+                      </div>
+                      
+                      <Button 
+                        size="lg" 
+                        className="bg-[#CDFB27] hover:bg-[#CDFB27]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
+                        asChild
+                      >
+                        <a href="https://buy.infinitepay.io/" target="_blank" rel="noopener noreferrer">
+                          Compre agora sua Maquininha
+                        </a>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </>
           )}
