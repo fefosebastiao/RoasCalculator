@@ -454,7 +454,7 @@ const Calculator = () => {
                 <Card className="shadow-sm bg-white border-l-4 border-gray-400">
                   <CardContent className="p-4">
                     <h4 className="text-sm font-semibold text-gray-600 mb-2">Em Relação ao Benchmark</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.percentOfBenchmark}%</div>
+                    <div className="text-2xl font-bold text-gray-900">{results.percentOfBenchmark.toFixed(2)}%</div>
                     <p className="text-sm text-gray-500 mt-1">
                       {results.percentOfBenchmark >= 100 
                         ? "Seu ROAS está acima da média do setor!" 
