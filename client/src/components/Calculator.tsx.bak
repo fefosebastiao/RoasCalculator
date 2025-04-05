@@ -173,7 +173,7 @@ const Calculator = () => {
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <CustomFormMessage variant="default" />
+                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -202,7 +202,7 @@ const Calculator = () => {
                                   <SelectItem value="none">Não emite notas</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <CustomFormMessage variant="default" />
+                              <FormMessage />
                             </FormItem>
                           )}
                         />

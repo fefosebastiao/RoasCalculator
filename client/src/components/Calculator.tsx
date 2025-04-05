@@ -8,6 +8,7 @@ import { calculatorSchema, CalculatorFormData, CalculatorResults } from "@shared
 import { industryOptions } from "@/data/industryBenchmarks";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { NumericInput } from "./NumericInput";
+import { CustomFormMessage } from "@/components/ui/custom-form-message";
 
 import {
   Form,
@@ -172,7 +173,7 @@ const Calculator = () => {
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <FormMessage />
+                              <CustomFormMessage variant="default" />
                             </FormItem>
                           )}
                         />
@@ -201,7 +202,7 @@ const Calculator = () => {
                                   <SelectItem value="none">Não emite notas</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <FormMessage />
+                              <CustomFormMessage variant="default" />
                             </FormItem>
                           )}
                         />
@@ -224,7 +225,7 @@ const Calculator = () => {
                                   />
                                 </div>
                               </FormControl>
-                              {touchedFields.adSpend && <FormMessage />}
+                              {touchedFields.adSpend && <CustomFormMessage variant="default" />}
                             </FormItem>
                           )}
                         />
@@ -247,7 +248,7 @@ const Calculator = () => {
                                   />
                                 </div>
                               </FormControl>
-                              {touchedFields.revenue && <FormMessage />}
+                              {touchedFields.revenue && <CustomFormMessage variant="default" />}
                             </FormItem>
                           )}
                         />
@@ -267,7 +268,7 @@ const Calculator = () => {
                                   value={field.value}
                                 />
                               </FormControl>
-                              {touchedFields.monthlySales && <FormMessage />}
+                              {touchedFields.monthlySales && <CustomFormMessage variant="default" />}
                             </FormItem>
                           )}
                         />
