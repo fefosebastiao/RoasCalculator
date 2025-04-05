@@ -457,8 +457,13 @@ const Calculator = () => {
                           <LightbulbIcon className="h-5 w-5 text-primary" />
                         </div>
                         <div className="ml-3">
-                          <h4 className="text-sm font-medium text-primary-800">Análise personalizada</h4>
-                          <p className="mt-1 text-sm text-primary-700">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <h4 className="text-sm font-medium text-primary-800">Análise personalizada</h4>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                              AI
+                            </span>
+                          </div>
+                          <p className="mt-1 text-sm text-primary-700 whitespace-pre-line">
                             {results.analysis}
                           </p>
                         </div>

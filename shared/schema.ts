@@ -53,6 +53,7 @@ export type CalculatorFormData = z.infer<typeof calculatorSchema>;
 
 export const leadSchema = calculatorSchema.extend({
   email: z.string().email("Email inválido"),
+  channel: z.string().optional().default("website"),
 });
 
 export type CalculatorResults = {
