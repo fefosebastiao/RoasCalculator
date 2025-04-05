@@ -137,15 +137,12 @@ const EducationalSection = () => {
                 </div>
               </CardContent>
               <div className="relative h-64 md:h-auto">
-                <div className="h-full bg-gray-200 flex items-center justify-center">
-                  <svg className="h-16 w-16 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                    <path d="M3 8h2M3 12h2M3 16h2"></path>
-                    <path d="M17 8h2M17 12h2M17 16h2"></path>
-                    <path d="M7 8h10v8H7z"></path>
-                  </svg>
+                <div className="h-full bg-white flex items-center justify-center p-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Análise de dados de marketing" 
+                    className="max-w-full h-auto rounded-lg shadow-md object-cover"
+                  />
                 </div>
               </div>
             </div>
