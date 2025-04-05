@@ -238,52 +238,12 @@ const Calculator = () => {
               <CardContent className="p-6 md:p-8 flex flex-col justify-center">
                 {!results ? (
                   <div className="text-center">
-                    <div className="rounded-lg mx-auto mb-6 shadow-md bg-white h-48 flex flex-col p-3">
-                      {/* Dashboard Header */}
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-sm font-semibold text-gray-900">Dashboard de ROAS</div>
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                          <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                        </div>
-                      </div>
-                      
-                      {/* Main Dashboard */}
-                      <div className="flex flex-1 space-x-2">
-                        {/* Left side - KPIs */}
-                        <div className="w-1/3 flex flex-col space-y-2">
-                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                            <div className="text-[10px] text-gray-500">ROAS Médio</div>
-                            <div className="text-primary font-bold text-xl">3.2x</div>
-                          </div>
-                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                            <div className="text-[10px] text-gray-500">Conversão</div>
-                            <div className="text-primary font-bold text-xl">4.7%</div>
-                          </div>
-                        </div>
-                        
-                        {/* Right side - Chart */}
-                        <div className="w-2/3 bg-gray-50 rounded-md p-2 flex flex-col">
-                          <div className="text-[10px] text-gray-500 mb-1">Evolução do ROAS</div>
-                          <div className="flex-1 flex items-end pt-2">
-                            <div className="h-30% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-40% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-35% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-60% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
-                            <div className="h-75% w-1/6 bg-primary-500 rounded-t-sm mx-0.5"></div>
-                            <div className="h-90% w-1/6 bg-primary-600 rounded-t-sm mx-0.5"></div>
-                          </div>
-                          <div className="flex text-[8px] text-gray-400 pt-1 justify-between px-1">
-                            <span>Jan</span>
-                            <span>Fev</span>
-                            <span>Mar</span>
-                            <span>Abr</span>
-                            <span>Mai</span>
-                            <span>Jun</span>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="rounded-lg mx-auto mb-6 shadow-md overflow-hidden">
+                      <img 
+                        src={dashboardImg} 
+                        alt="Dashboard de ROAS" 
+                        className="w-full h-auto" 
+                      />
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-3">Descubra o potencial do seu ROAS</h3>
                     <p className="text-gray-600 mb-6">Preencha o formulário ao lado para calcular seu ROAS atual e receber insights personalizados para melhorar seus resultados.</p>
