@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { calculatorSchema, CalculatorFormData, CalculatorResults } from "@shared/schema";
 import { industryOptions } from "@/data/industryBenchmarks";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import { NumericInput } from "./NumericInput";
 
 import {
   Form,
@@ -32,6 +33,15 @@ const Calculator = () => {
   const totalSteps = 5;
   const { toast } = useToast();
 
+  // Estado para rastrear quando os campos foram tocados
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({
+    industry: false,
+    serviceOrProduct: false,
+    adSpend: false,
+    revenue: false,
+    monthlySales: false
+  });
+
   const form = useForm<CalculatorFormData>({
     resolver: zodResolver(calculatorSchema),
     defaultValues: {
@@ -41,6 +51,8 @@ const Calculator = () => {
       revenue: undefined,
       monthlySales: undefined
     },
+    // Desabilita a validação na primeira renderização
+    mode: 'onTouched'
   });
 
   const calculateRoasMutation = useMutation({
@@ -83,15 +95,19 @@ const Calculator = () => {
   // Função para permitir o avanço com botões independente do submit do formulário
   const handleNext = () => {
     const currentFieldName = getCurrentFieldName();
-    const value = form.getValues(currentFieldName);
+    
+    // Marca o campo como tocado
+    setTouchedFields(prev => ({
+      ...prev,
+      [currentFieldName]: true
+    }));
     
     // Verifica se o campo atual é válido
-    if (value) {
-      nextStep();
-    } else {
-      // Disparar validação do campo atual manualmente
-      form.trigger(currentFieldName);
-    }
+    form.trigger(currentFieldName).then(isValid => {
+      if (isValid) {
+        nextStep();
+      }
+    });
   };
   
   // Função auxiliar para obter o nome do campo atual com base no passo
@@ -104,6 +120,11 @@ const Calculator = () => {
       case 5: return "monthlySales";
       default: return "industry";
     }
+  };
+  
+  // Função para verificar se deve mostrar erros para um campo específico
+  const shouldShowError = (fieldName: keyof CalculatorFormData) => {
+    return touchedFields[fieldName];
   };
 
   return (
@@ -195,22 +216,15 @@ const Calculator = () => {
                               <FormLabel>Quanto é investido em anúncios mensalmente? (R$)</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-gray-500 sm:text-sm">R$</span>
-                                  </div>
-                                  <Input 
-                                    placeholder="Exemplo: 5000" 
-                                    type="number" 
-                                    className="pl-10"
-                                    value={field.value || ""}
-                                    onChange={(e) => {
-                                      const value = e.target.value === "" ? undefined : Number(e.target.value);
-                                      field.onChange(value);
-                                    }}
+                                  <NumericInput 
+                                    placeholder="Exemplo: 5000"
+                                    prefix="R$"
+                                    onValueChange={field.onChange}
+                                    value={field.value}
                                   />
                                 </div>
                               </FormControl>
-                              <FormMessage />
+                              {touchedFields.adSpend && <FormMessage />}
                             </FormItem>
                           )}
                         />
@@ -225,22 +239,15 @@ const Calculator = () => {
                               <FormLabel>Quanto é o faturamento mensal? (R$)</FormLabel>
                               <FormControl>
                                 <div className="relative">
-                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-gray-500 sm:text-sm">R$</span>
-                                  </div>
-                                  <Input 
+                                  <NumericInput 
                                     placeholder="Exemplo: 20000" 
-                                    type="number" 
-                                    className="pl-10"
-                                    value={field.value || ""}
-                                    onChange={(e) => {
-                                      const value = e.target.value === "" ? undefined : Number(e.target.value);
-                                      field.onChange(value);
-                                    }}
+                                    prefix="R$"
+                                    onValueChange={field.onChange}
+                                    value={field.value}
                                   />
                                 </div>
                               </FormControl>
-                              <FormMessage />
+                              {touchedFields.revenue && <FormMessage />}
                             </FormItem>
                           )}
                         />
@@ -254,17 +261,13 @@ const Calculator = () => {
                             <FormItem>
                               <FormLabel>Quantas vendas ou conversões por mês sua empresa realiza?</FormLabel>
                               <FormControl>
-                                <Input 
+                                <NumericInput 
                                   placeholder="Informe o número médio mensal" 
-                                  type="number" 
-                                  value={field.value || ""}
-                                  onChange={(e) => {
-                                    const value = e.target.value === "" ? undefined : Number(e.target.value);
-                                    field.onChange(value);
-                                  }}
+                                  onValueChange={field.onChange}
+                                  value={field.value}
                                 />
                               </FormControl>
-                              <FormMessage />
+                              {touchedFields.monthlySales && <FormMessage />}
                             </FormItem>
                           )}
                         />
