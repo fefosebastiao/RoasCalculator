@@ -29,18 +29,17 @@ import { Loader2, LightbulbIcon, ArrowRight } from "lucide-react";
 const Calculator = () => {
   const [results, setResults] = useState<CalculatorResults | null>(null);
   const [step, setStep] = useState(1);
-  const totalSteps = 6;
+  const totalSteps = 5;
   const { toast } = useToast();
 
   const form = useForm<CalculatorFormData>({
     resolver: zodResolver(calculatorSchema),
     defaultValues: {
       industry: "",
-      monthlySales: undefined,
-      averageSaleValue: undefined,
-      monthlyLeads: undefined,
+      serviceOrProduct: "",
       adSpend: undefined,
-      revenue: undefined
+      revenue: undefined,
+      monthlySales: undefined
     },
   });
 
@@ -99,11 +98,10 @@ const Calculator = () => {
   const getCurrentFieldName = (): keyof CalculatorFormData => {
     switch (step) {
       case 1: return "industry";
-      case 2: return "monthlySales";
-      case 3: return "averageSaleValue";
-      case 4: return "monthlyLeads";
-      case 5: return "adSpend";
-      case 6: return "revenue";
+      case 2: return "serviceOrProduct";
+      case 3: return "adSpend";
+      case 4: return "revenue";
+      case 5: return "monthlySales";
       default: return "industry";
     }
   };
@@ -160,21 +158,26 @@ const Calculator = () => {
                     {step === 2 && (
                       <FormField
                         control={form.control}
-                        name="monthlySales"
+                        name="serviceOrProduct"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Quantas vendas seu negócio faz no mês?</FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder="50" 
-                                type="number" 
-                                {...field} 
-                                onChange={(e) => {
-                                  const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
-                                  field.onChange(value);
-                                }}
-                              />
-                            </FormControl>
+                            <FormLabel>Emite notas de serviços ou produto?</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione uma opção" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="service">Serviços</SelectItem>
+                                <SelectItem value="product">Produtos</SelectItem>
+                                <SelectItem value="both">Ambos</SelectItem>
+                                <SelectItem value="none">Não emite notas</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -184,64 +187,10 @@ const Calculator = () => {
                     {step === 3 && (
                       <FormField
                         control={form.control}
-                        name="averageSaleValue"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Qual é o valor médio de uma venda? (R$)</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                  <span className="text-gray-500 sm:text-sm">R$</span>
-                                </div>
-                                <Input 
-                                  placeholder="400" 
-                                  type="number" 
-                                  className="pl-10"
-                                  {...field} 
-                                  onChange={(e) => {
-                                    const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
-                                    field.onChange(value);
-                                  }}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                    
-                    {step === 4 && (
-                      <FormField
-                        control={form.control}
-                        name="monthlyLeads"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Quantos compradores entram em contato por mês?</FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder="150" 
-                                type="number" 
-                                {...field} 
-                                onChange={(e) => {
-                                  const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
-                                  field.onChange(value);
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                    
-                    {step === 5 && (
-                      <FormField
-                        control={form.control}
                         name="adSpend"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Investimento mensal (R$)</FormLabel>
+                            <FormLabel>Quanto é investido em anúncios mensalmente? (R$)</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -265,13 +214,13 @@ const Calculator = () => {
                       />
                     )}
                     
-                    {step === 6 && (
+                    {step === 4 && (
                       <FormField
                         control={form.control}
                         name="revenue"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Receita mensal (R$)</FormLabel>
+                            <FormLabel>Quanto é o faturamento mensal? (R$)</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -288,6 +237,30 @@ const Calculator = () => {
                                   }}
                                 />
                               </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    
+                    {step === 5 && (
+                      <FormField
+                        control={form.control}
+                        name="monthlySales"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Quantas vendas ou conversões por mês sua empresa faz?</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="50" 
+                                type="number" 
+                                {...field} 
+                                onChange={(e) => {
+                                  const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                  field.onChange(value);
+                                }}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

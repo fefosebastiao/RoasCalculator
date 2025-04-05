@@ -45,18 +45,10 @@ export const calculatorSchema = z.object({
     required_error: "Insira um valor válido",
     invalid_type_error: "Insira um valor válido"
   }).min(1, "Selecione um setor"),
-  monthlySales: z.number({
+  serviceOrProduct: z.string({
     required_error: "Insira um valor válido",
     invalid_type_error: "Insira um valor válido"
-  }).min(1, "O número de vendas deve ser maior que zero"),
-  averageSaleValue: z.number({
-    required_error: "Insira um valor válido",
-    invalid_type_error: "Insira um valor válido"
-  }).min(1, "O valor médio de venda deve ser maior que zero"),
-  monthlyLeads: z.number({
-    required_error: "Insira um valor válido",
-    invalid_type_error: "Insira um valor válido"
-  }).min(1, "O número de compradores deve ser maior que zero"),
+  }).min(1, "Esta informação é obrigatória"),
   adSpend: z.number({
     required_error: "Insira um valor válido",
     invalid_type_error: "Insira um valor válido"
@@ -64,7 +56,11 @@ export const calculatorSchema = z.object({
   revenue: z.number({
     required_error: "Insira um valor válido",
     invalid_type_error: "Insira um valor válido"
-  }).min(1, "Receita deve ser maior que zero"),
+  }).min(1, "Faturamento deve ser maior que zero"),
+  monthlySales: z.number({
+    required_error: "Insira um valor válido",
+    invalid_type_error: "Insira um valor válido"
+  }).min(1, "O número de vendas deve ser maior que zero"),
 });
 
 export type CalculatorFormData = z.infer<typeof calculatorSchema>;
