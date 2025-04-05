@@ -3,7 +3,6 @@ import HeroSection from "@/components/HeroSection";
 import Calculator from "@/components/Calculator";
 import EducationalSection from "@/components/EducationalSection";
 import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
 
 const HomePage = () => {
   return (
@@ -15,7 +14,6 @@ const HomePage = () => {
         <EducationalSection />
         <CTASection />
       </main>
-      <Footer />
     </div>
   );
 };
