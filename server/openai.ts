@@ -5,18 +5,17 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 export async function generateROASAnalysis(formData: any): Promise<string> {
   try {
-    const { industry, monthlySales, averageSaleValue, monthlyLeads, adSpend, revenue, roas, benchmark } = formData;
+    const { industry, serviceOrProduct, monthlySales, adSpend, revenue, roas, benchmark } = formData;
     
     const prompt = `
       Como especialista em marketing digital e ROAS (Return on Ad Spend), forneça uma análise personalizada 
       dos seguintes dados de publicidade digital:
       
       - Setor/Indústria: ${industry}
+      - Emite notas de: ${serviceOrProduct}
       - Vendas mensais: ${monthlySales}
-      - Valor médio por venda: R$ ${averageSaleValue}
-      - Leads mensais: ${monthlyLeads}
       - Investimento em anúncios: R$ ${adSpend}
-      - Receita: R$ ${revenue}
+      - Faturamento mensal: R$ ${revenue}
       - ROAS atual: ${roas.toFixed(2)}x
       - Benchmark do setor: ${benchmark.toFixed(2)}x
       
