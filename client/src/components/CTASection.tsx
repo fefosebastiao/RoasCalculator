@@ -61,7 +61,7 @@ const CTASection = () => {
               
               <Button 
                 size="lg" 
-                className="bg-[#DAFE12] hover:bg-[#DAFE12]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
+                className="bg-[#CDFB27] hover:bg-[#CDFB27]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
                 asChild
               >
                 <Link href="#calculator" onClick={scrollToCalculator}>
