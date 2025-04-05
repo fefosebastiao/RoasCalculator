@@ -6,6 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { calculatorSchema, CalculatorFormData, CalculatorResults } from "@shared/schema";
 import { industryOptions } from "@/data/industryBenchmarks";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 
 import {
   Form,
@@ -27,6 +28,8 @@ import { Loader2, LightbulbIcon, ArrowRight } from "lucide-react";
 
 const Calculator = () => {
   const [results, setResults] = useState<CalculatorResults | null>(null);
+  const [step, setStep] = useState(1);
+  const totalSteps = 6;
   const { toast } = useToast();
 
   const form = useForm<CalculatorFormData>({
@@ -58,8 +61,24 @@ const Calculator = () => {
     },
   });
 
+  const nextStep = () => {
+    if (step < totalSteps) {
+      setStep(step + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+  
   const onSubmit = (data: CalculatorFormData) => {
-    calculateRoasMutation.mutate(data);
+    if (step < totalSteps) {
+      nextStep();
+    } else {
+      calculateRoasMutation.mutate(data);
+    }
   };
 
   return (
@@ -71,161 +90,207 @@ const Calculator = () => {
             <Card className="shadow-lg">
               <CardContent className="p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Calculadora de ROAS</h2>
+                {/* Progress indicator */}
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm text-gray-500 mb-2">
+                    <span>Questão {step} de {totalSteps}</span>
+                    <span>{Math.round((step / totalSteps) * 100)}%</span>
+                  </div>
+                  <Progress value={(step / totalSteps) * 100} className="h-2" />
+                </div>
+                
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="adSpend"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Investimento mensal (R$)</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span className="text-gray-500 sm:text-sm">R$</span>
-                              </div>
-                              <Input 
-                                placeholder="5.000" 
-                                type="number" 
-                                className="pl-10"
-                                {...field} 
-                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                     
-                    <FormField
-                      control={form.control}
-                      name="revenue"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Receita mensal (R$)</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span className="text-gray-500 sm:text-sm">R$</span>
-                              </div>
-                              <Input 
-                                placeholder="20.000" 
-                                type="number" 
-                                className="pl-10"
-                                {...field} 
-                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {step === 1 && (
+                      <FormField
+                        control={form.control}
+                        name="industry"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Qual é o seu setor?</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione seu setor" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {industryOptions.map(option => (
+                                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
-                    <FormField
-                      control={form.control}
-                      name="industry"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Qual é o seu setor?</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                          >
+                    {step === 2 && (
+                      <FormField
+                        control={form.control}
+                        name="monthlySales"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Quantas vendas seu negócio faz no mês?</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione seu setor" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {industryOptions.map(option => (
-                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="monthlySales"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Quantas vendas seu negócio faz no mês?</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="50" 
-                              type="number" 
-                              {...field} 
-                              onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="averageSaleValue"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Qual é o valor médio de uma venda? (R$)</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span className="text-gray-500 sm:text-sm">R$</span>
-                              </div>
                               <Input 
-                                placeholder="400" 
+                                placeholder="50" 
                                 type="number" 
-                                className="pl-10"
                                 {...field} 
                                 onChange={(e) => field.onChange(e.target.valueAsNumber)}
                               />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
-                    <FormField
-                      control={form.control}
-                      name="monthlyLeads"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Quantos compradores entram em contato por mês?</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="150" 
-                              type="number" 
-                              {...field} 
-                              onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {step === 3 && (
+                      <FormField
+                        control={form.control}
+                        name="averageSaleValue"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Qual é o valor médio de uma venda? (R$)</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <span className="text-gray-500 sm:text-sm">R$</span>
+                                </div>
+                                <Input 
+                                  placeholder="400" 
+                                  type="number" 
+                                  className="pl-10"
+                                  {...field} 
+                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
-                    <Button 
-                      type="submit" 
-                      className="w-full font-medium" 
-                      disabled={calculateRoasMutation.isPending}
-                    >
-                      {calculateRoasMutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Calculando...
-                        </>
+                    {step === 4 && (
+                      <FormField
+                        control={form.control}
+                        name="monthlyLeads"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Quantos compradores entram em contato por mês?</FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="150" 
+                                type="number" 
+                                {...field} 
+                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    
+                    {step === 5 && (
+                      <FormField
+                        control={form.control}
+                        name="adSpend"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Investimento mensal (R$)</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <span className="text-gray-500 sm:text-sm">R$</span>
+                                </div>
+                                <Input 
+                                  placeholder="5.000" 
+                                  type="number" 
+                                  className="pl-10"
+                                  {...field} 
+                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    
+                    {step === 6 && (
+                      <FormField
+                        control={form.control}
+                        name="revenue"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Receita mensal (R$)</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <span className="text-gray-500 sm:text-sm">R$</span>
+                                </div>
+                                <Input 
+                                  placeholder="20.000" 
+                                  type="number" 
+                                  className="pl-10"
+                                  {...field} 
+                                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    
+                    <div className="flex justify-between mt-6">
+                      {step > 1 ? (
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={prevStep}
+                          className="space-x-2"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          <span>Voltar</span>
+                        </Button>
                       ) : (
-                        results ? "Recalcular" : "Calcular meu ROAS"
+                        <div></div>
                       )}
-                    </Button>
+                      
+                      <Button 
+                        type="submit" 
+                        disabled={calculateRoasMutation.isPending}
+                        className="space-x-2"
+                      >
+                        {calculateRoasMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <span>Calculando...</span>
+                          </>
+                        ) : step < totalSteps ? (
+                          <>
+                            <span>Próximo</span>
+                            <ChevronRight className="h-4 w-4" />
+                          </>
+                        ) : (
+                          <>
+                            <span>Calcular meu ROAS</span>
+                            <ChevronRight className="h-4 w-4" />
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </form>
                 </Form>
               </CardContent>
