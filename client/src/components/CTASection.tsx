@@ -64,9 +64,9 @@ const CTASection = () => {
                 className="bg-[#CDFB27] hover:bg-[#CDFB27]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
                 asChild
               >
-                <Link href="#calculator" onClick={scrollToCalculator}>
+                <a href="https://buy.infinitepay.io/" target="_blank" rel="noopener noreferrer">
                   Compre agora sua Maquininha
-                </Link>
+                </a>
               </Button>
             </CardContent>
           </Card>
