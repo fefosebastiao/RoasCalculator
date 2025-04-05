@@ -266,13 +266,32 @@ const Calculator = () => {
                         {/* Right side - Chart */}
                         <div className="w-2/3 bg-gray-50 rounded-md p-2 flex flex-col">
                           <div className="text-[10px] text-gray-500 mb-1">Evolução do ROAS</div>
-                          <div className="flex-1 flex items-end pt-2">
+                          <div className="flex-1 flex items-end pt-2 relative">
+                            {/* Barras */}
                             <div className="h-30% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
                             <div className="h-40% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
                             <div className="h-35% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
                             <div className="h-60% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
                             <div className="h-75% w-1/6 bg-primary-500 rounded-t-sm mx-0.5"></div>
                             <div className="h-90% w-1/6 bg-primary-600 rounded-t-sm mx-0.5"></div>
+                            
+                            {/* Linha de evolução do ROAS */}
+                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                              <polyline
+                                points="8,70 25,60 41,65 58,40 75,25 92,10"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className="text-primary-600"
+                              />
+                              {/* Pontos da linha */}
+                              <circle cx="8" cy="70" r="2" className="fill-primary-600" />
+                              <circle cx="25" cy="60" r="2" className="fill-primary-600" />
+                              <circle cx="41" cy="65" r="2" className="fill-primary-600" />
+                              <circle cx="58" cy="40" r="2" className="fill-primary-600" />
+                              <circle cx="75" cy="25" r="2" className="fill-primary-600" />
+                              <circle cx="92" cy="10" r="2" className="fill-primary-600" />
+                            </svg>
                           </div>
                           <div className="flex text-[8px] text-gray-400 pt-1 justify-between px-1">
                             <span>Jan</span>
