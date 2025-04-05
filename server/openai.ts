@@ -1,79 +1,112 @@
 import OpenAI from "openai";
 
-// Inicializa a instância principal com a chave primária
+// Configuração da instância principal de OpenAI
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Inicializa a instância de backup com a chave secundária
-const openaiBackup = new OpenAI({ apiKey: process.env.OPENAI_BACKUP_API_KEY });
+// Configuração da instância de backup de OpenAI
+const backupOpenai = new OpenAI({ apiKey: process.env.OPENAI_BACKUP_API_KEY });
 
-// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 export async function generateROASAnalysis(formData: any): Promise<string> {
-  const { industry, serviceOrProduct, monthlySales, adSpend, revenue, roas, benchmark } = formData;
+  const { industry, adSpend, revenue, monthlySales, serviceOrProduct } = formData;
+  const roas = revenue / adSpend;
   
+  // Prompt formatado para obter uma análise mais completa
   const prompt = `
-    Como especialista em marketing digital e ROAS (Return on Ad Spend), forneça uma análise personalizada 
-    dos seguintes dados de publicidade digital:
+    Você é um analista especializado em marketing digital para a empresa InfinitePay. 
     
-    - Setor/Indústria: ${industry}
-    - Emite notas de: ${serviceOrProduct}
-    - Vendas mensais: ${monthlySales}
-    - Investimento em anúncios: R$ ${adSpend}
+    Analise os seguintes dados de uma empresa e dê insights sobre seu ROAS (Retorno sobre Investimento em Anúncios):
+    
+    - Setor da empresa: ${industry}
+    - Tipo de negócio: ${serviceOrProduct} (service = serviços, product = produtos, both = ambos, none = não emite notas)
+    - Investimento mensal em anúncios: R$ ${adSpend}
     - Faturamento mensal: R$ ${revenue}
-    - ROAS atual: ${roas.toFixed(2)}x
-    - Benchmark do setor: ${benchmark.toFixed(2)}x
+    - Vendas/Conversões mensais: ${monthlySales}
+    - ROAS calculado: ${roas.toFixed(2)}
     
-    Forneça uma análise concisa e personalizada com no máximo 3 parágrafos que:
-    1. Explique a performance atual comparando com a média do setor
-    2. Identifique possíveis áreas de melhoria ou destaque pontos fortes
-    3. Sugira estratégias específicas para otimizar o ROAS
+    Por favor, forneça uma análise detalhada em português que inclua:
+    1. Uma avaliação do ROAS atual da empresa
+    2. Comparação com médias do setor
+    3. Recomendações específicas para melhorar o ROAS
+    4. Potenciais áreas de otimização
     
-    Responda em português, use linguagem acessível, e mantenha um tom profissional e encorajador.
-    Seja específico e leve em consideração o setor em suas recomendações.
+    Mantenha a análise concisa (máximo de 300 palavras), prática e específica para o setor.
   `;
-  
-  const systemMessage = {
-    role: "system" as const,
-    content: "Você é um especialista em marketing digital e análise de ROAS (Return on Ad Spend), com conhecimento profundo sobre otimização de campanhas publicitárias em diferentes setores. Seu papel é fornecer análises personalizadas, práticas e acionáveis para ajudar empresas a melhorar o retorno sobre seus investimentos em anúncios."
-  };
-  
-  const userMessage = {
-    role: "user" as const,
-    content: prompt
-  };
-  
-  const requestOptions = {
-    model: "gpt-4o",
-    messages: [systemMessage, userMessage],
-    temperature: 0.7,
-    max_tokens: 500,
-  };
 
-  // Primeiro, tenta usar a chave principal
   try {
     console.log("Tentando requisição com a chave principal da OpenAI...");
-    const response = await openai.chat.completions.create(requestOptions);
-    console.log("Requisição com chave principal bem-sucedida!");
-    return response.choices[0].message.content || "Não foi possível gerar uma análise personalizada no momento.";
-  } catch (primaryError) {
-    console.error("Erro ao usar chave principal da OpenAI:", primaryError);
     
-    // Se falhar, tenta usar a chave de backup
     try {
-      console.log("Tentando requisição com a chave de backup da OpenAI...");
-      const backupResponse = await openaiBackup.chat.completions.create(requestOptions);
-      console.log("Requisição com chave de backup bem-sucedida!");
-      return backupResponse.choices[0].message.content || "Não foi possível gerar uma análise personalizada no momento.";
-    } catch (backupError) {
-      console.error("Erro ao usar chave de backup da OpenAI:", backupError);
+      // Primeira tentativa com a chave principal
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o", // o modelo mais recente da OpenAI é "gpt-4o" lançado em 13 de maio de 2024
+        messages: [
+          { role: "system", content: "Você é um especialista em marketing digital e análise de dados." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 700
+      });
       
-      // Se ambas as tentativas falharem, retorna uma mensagem amigável
-      return `
-        Com base nos dados fornecidos, seu ROAS de ${roas.toFixed(2)}x ${roas > benchmark ? 'está acima' : 'está abaixo'} da média do setor (${benchmark.toFixed(2)}x).
-
-        Recomendamos revisar sua estratégia de anúncios para otimizar os custos de aquisição e melhorar a taxa de conversão. Considere segmentar melhor seu público-alvo e refinar suas campanhas.
-
-        Para melhorar seu ROAS, sugerimos analisar quais canais de marketing estão trazendo os melhores resultados, investir em otimização de landing pages e trabalhar no funil de conversão para aumentar as taxas de conclusão de vendas.
-      `;
+      return response.choices[0].message.content || gerarAnaliseBasica(roas);
+    } catch (error) {
+      console.error("Erro ao usar chave principal da OpenAI:", error);
+      
+      // Segunda tentativa com a chave de backup
+      console.log("Tentando requisição com a chave de backup da OpenAI...");
+      try {
+        const backupResponse = await backupOpenai.chat.completions.create({
+          model: "gpt-4o", // o modelo mais recente da OpenAI é "gpt-4o" lançado em 13 de maio de 2024
+          messages: [
+            { role: "system", content: "Você é um especialista em marketing digital e análise de dados." },
+            { role: "user", content: prompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 700
+        });
+        
+        console.log("Requisição com chave de backup bem-sucedida!");
+        return backupResponse.choices[0].message.content || gerarAnaliseBasica(roas);
+      } catch (backupError) {
+        console.error("Erro ao usar chave de backup da OpenAI:", backupError);
+        
+        // Retornar análise básica caso ambas as chaves falhem
+        console.log("Ambas as chaves falharam, gerando análise básica...");
+        return gerarAnaliseBasica(roas);
+      }
     }
+  } catch (generalError) {
+    console.error("Erro geral na função de análise:", generalError);
+    return gerarAnaliseBasica(roas);
   }
+}
+
+// Função para gerar uma análise básica quando ambas as chaves API falham
+function gerarAnaliseBasica(roas: number): string {
+  const avaliacaoROAS = roas < 2 ? 
+    "Seu ROAS está abaixo do que é considerado viável para a maioria dos negócios." : 
+    roas < 4 ? 
+      "Seu ROAS está na faixa média para a maioria dos setores." : 
+      "Seu ROAS está acima da média, indicando uma boa eficiência nos investimentos em anúncios.";
+  
+  const recomendacoes = roas < 2 ? 
+    "Recomendamos revisar suas campanhas de marketing, segmentação de público e canais utilizados. Considere reduzir o investimento em canais de baixo desempenho e realoque os recursos para canais mais efetivos." : 
+    roas < 4 ? 
+      "Para melhorar ainda mais seu ROAS, considere otimizar suas campanhas de melhor desempenho e testar novos formatos de anúncios e mensagens. Análise de concorrentes também pode revelar oportunidades." : 
+      "Para manter esse excelente desempenho, continue monitorando suas métricas e testes A/B. Considere escalar gradualmente os canais mais eficientes.";
+  
+  return `Análise básica do seu ROAS:
+
+${avaliacaoROAS}
+
+Um ROAS de ${roas.toFixed(1)}x significa que para cada R$1 investido em publicidade, você obtém R$${roas.toFixed(2)} em retorno.
+
+${recomendacoes}
+
+Áreas potenciais para otimização:
+1. Ajuste da segmentação de público
+2. Melhoria da experiência de conversão no site
+3. Teste de diferentes formatos criativos
+4. Otimização dos horários e dias de veiculação dos anúncios
+
+Essa análise é baseada apenas nos dados fornecidos e deve ser complementada com uma avaliação mais abrangente de sua estratégia de marketing.`;
 }
