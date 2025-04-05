@@ -43,6 +43,14 @@ const Calculator = () => {
       adSpend: undefined,
       revenue: undefined
     },
+    // Personalização das mensagens de erro padrão
+    shouldUseNativeValidation: false,
+    mode: "onChange",
+    criteriaMode: "all",
+    // Substituir mensagens de erro padrão
+    context: {
+      errorMap: () => ({ message: "Insira um valor válido" })
+    }
   });
 
   const calculateRoasMutation = useMutation({
