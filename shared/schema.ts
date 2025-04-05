@@ -71,8 +71,17 @@ export const leadSchema = calculatorSchema.extend({
 });
 
 export type CalculatorResults = {
+  // ROAS
   roas: number;
   benchmark: number;
-  analysis: string;
   percentOfBenchmark: number;
+  
+  // Ticket Médio
+  ticketMedio: number;
+  
+  // CPA (Custo por Aquisição)
+  cpa: number;
+  
+  // Análise personalizada
+  analysis: string;
 };
