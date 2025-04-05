@@ -41,8 +41,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate the request body
       const validatedData = calculatorSchema.parse(req.body);
       
-      // Calculate ROAS
+      // 1. Calculate ROAS (Retorno sobre investimento em anúncios)
       const roas = validatedData.revenue / validatedData.adSpend;
+      
+      // 2. Calculate Ticket Médio (Valor médio por venda ou conversão)
+      const ticketMedio = validatedData.revenue / validatedData.monthlySales;
+      
+      // 3. Calculate CPA (Custo por Aquisição)
+      const cpa = validatedData.adSpend / validatedData.monthlySales;
       
       // Get benchmark for the industry
       const industryBenchmarks: Record<string, number> = {
@@ -69,19 +75,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         basicAnalysis = `Seu ROAS está acima da média para o setor (${benchmark.toFixed(1)}x). Considere aumentar gradualmente seu orçamento publicitário para escalar seus resultados mantendo a eficiência.`;
       }
 
-      // Calculate percentage of benchmark (for the indicator)
-      const percentOfBenchmark = Math.min(Math.max((roas / (benchmark * 2)) * 100, 5), 100);
+      // 4. Calculate percentage of benchmark (for the indicator)
+      const percentOfBenchmark = Math.min(Math.max((roas / benchmark) * 100, 5), 100);
       
-      // Generate AI-powered personalized analysis
+      // 5. Generate AI-powered personalized analysis
       try {
         // Create data object for OpenAI
         const analysisData = {
           ...validatedData,
           roas,
           benchmark,
-          monthlySales: validatedData.monthlySales || 0,
-          averageSaleValue: validatedData.averageSaleValue || 0,
-          monthlyLeads: validatedData.monthlyLeads || 0
+          ticketMedio,
+          cpa,
+          monthlySales: validatedData.monthlySales,
+          serviceOrProduct: validatedData.serviceOrProduct
         };
         
         // Get AI analysis
@@ -90,8 +97,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.json({
           roas,
           benchmark,
-          analysis: aiAnalysis || basicAnalysis,
-          percentOfBenchmark
+          percentOfBenchmark,
+          ticketMedio,
+          cpa,
+          analysis: aiAnalysis || basicAnalysis
         });
       } catch (aiError) {
         console.error("Error generating AI analysis:", aiError);
@@ -99,8 +108,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.json({
           roas,
           benchmark,
-          analysis: basicAnalysis,
-          percentOfBenchmark
+          percentOfBenchmark,
+          ticketMedio,
+          cpa,
+          analysis: basicAnalysis
         });
       }
     } catch (error) {

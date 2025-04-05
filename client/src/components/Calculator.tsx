@@ -440,19 +440,34 @@ const Calculator = () => {
                 <Card className="shadow-sm bg-white border-l-4 border-primary">
                   <CardContent className="p-4">
                     <h4 className="text-sm font-semibold text-gray-600 mb-2">Seu ROAS</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.roas.toFixed(1)}x</div>
+                    <div className="text-2xl font-bold text-gray-900">{results.roas.toFixed(2)}x</div>
                   </CardContent>
                 </Card>
                 <Card className="shadow-sm bg-white border-l-4 border-gray-400">
                   <CardContent className="p-4">
                     <h4 className="text-sm font-semibold text-gray-600 mb-2">Benchmark do Setor</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.benchmark.toFixed(1)}x</div>
+                    <div className="text-2xl font-bold text-gray-900">{results.benchmark.toFixed(2)}x</div>
                   </CardContent>
                 </Card>
                 <Card className="shadow-sm bg-white border-l-4 border-gray-400">
                   <CardContent className="p-4">
                     <h4 className="text-sm font-semibold text-gray-600 mb-2">Em Relação ao Benchmark</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.percentOfBenchmark.toFixed(2)}%</div>
+                    <div className="text-2xl font-bold text-gray-900">{results.percentOfBenchmark.toFixed(2).replace(/\.00$/, ".00")}%</div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <Card className="shadow-sm bg-white border-l-4 border-blue-400">
+                  <CardContent className="p-4">
+                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Ticket Médio</h4>
+                    <div className="text-2xl font-bold text-gray-900">R$ {results.ticketMedio.toFixed(2)}</div>
+                  </CardContent>
+                </Card>
+                <Card className="shadow-sm bg-white border-l-4 border-blue-400">
+                  <CardContent className="p-4">
+                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Custo por Aquisição (CPA)</h4>
+                    <div className="text-2xl font-bold text-gray-900">R$ {results.cpa.toFixed(2)}</div>
                   </CardContent>
                 </Card>
               </div>
@@ -463,10 +478,19 @@ const Calculator = () => {
                     <LightbulbIcon className="h-6 w-6 text-yellow-500 mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="text-lg font-bold text-gray-800 mb-2">Análise Personalizada</h4>
-                      <div className="text-gray-600 space-y-3">
-                        {results.analysis.split('\n\n').map((paragraph, index) => (
-                          <p key={index}>{paragraph}</p>
-                        ))}
+                      <div className="text-gray-600 prose prose-sm max-w-none">
+                        {results.analysis.includes('##') 
+                          ? <div dangerouslySetInnerHTML={{ 
+                              __html: results.analysis
+                                .replace(/##\s(.*)/g, '<h2 class="text-lg font-bold mt-4 mb-2 text-gray-800">$1</h2>')
+                                .replace(/###\s(.*)/g, '<h3 class="text-md font-bold mt-3 mb-1 text-gray-700">$1</h3>')
+                                .replace(/\n\n/g, '<p class="mb-3"></p>')
+                                .split('\n').join('<br />')
+                            }} />
+                          : results.analysis.split('\n\n').map((paragraph, index) => (
+                              <p key={index} className="mb-3">{paragraph}</p>
+                            ))
+                        }
                       </div>
                     </div>
                   </div>
