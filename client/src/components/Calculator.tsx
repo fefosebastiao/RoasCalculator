@@ -9,6 +9,7 @@ import { industryOptions } from "@/data/industryBenchmarks";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { NumericInput } from "./NumericInput";
 import { CustomFormMessage } from "@/components/ui/custom-form-message";
+import WhatsAppForm from "./WhatsAppForm";
 
 interface CalculatorProps {
   onResultsShow?: () => void;
@@ -535,15 +536,7 @@ const Calculator = ({ onResultsShow, onCalculatorReset }: CalculatorProps) => {
                   >
                     Calcular Novamente
                   </Button>
-                  <Button 
-                    className="inline-flex items-center justify-center"
-                    asChild
-                  >
-                    <a href="https://wa.me/seunumero" target="_blank" rel="noopener noreferrer">
-                      Fale com um especialista
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
+                  <WhatsAppForm />
                 </div>
                 
                 {/* Seção de CTA dentro do componente Calculator quando os resultados estão visíveis */}

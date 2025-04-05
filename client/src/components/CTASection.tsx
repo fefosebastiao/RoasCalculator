@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
+import WhatsAppForm from "./WhatsAppForm";
 
 const CTASection = () => {
   const scrollToCalculator = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -59,15 +60,20 @@ const CTASection = () => {
                 <p className="text-xl font-bold">por: <span className="text-primary">12x de R$ 16,58</span> ou <span className="text-primary">R$ 199</span> pela Maquininha Smart com Pix grátis, conta digital e suporte RA1000</p>
               </div>
               
-              <Button 
-                size="lg" 
-                className="bg-[#CDFB27] hover:bg-[#CDFB27]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
-                asChild
-              >
-                <a href="https://buy.infinitepay.io/" target="_blank" rel="noopener noreferrer">
-                  Compre agora sua Maquininha
-                </a>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-[#CDFB27] hover:bg-[#CDFB27]/90 text-gray-900 px-8 py-6 rounded-full text-lg font-bold"
+                  asChild
+                >
+                  <a href="https://buy.infinitepay.io/" target="_blank" rel="noopener noreferrer">
+                    Compre agora sua Maquininha
+                  </a>
+                </Button>
+                <div className="mt-2 sm:mt-0">
+                  <WhatsAppForm />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
