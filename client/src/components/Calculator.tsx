@@ -199,12 +199,12 @@ const Calculator = () => {
                                     <span className="text-gray-500 sm:text-sm">R$</span>
                                   </div>
                                   <Input 
-                                    placeholder="5.000" 
+                                    placeholder="Exemplo: 5000" 
                                     type="number" 
                                     className="pl-10"
-                                    {...field} 
+                                    value={field.value || ""}
                                     onChange={(e) => {
-                                      const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                      const value = e.target.value === "" ? undefined : Number(e.target.value);
                                       field.onChange(value);
                                     }}
                                   />
@@ -229,12 +229,12 @@ const Calculator = () => {
                                     <span className="text-gray-500 sm:text-sm">R$</span>
                                   </div>
                                   <Input 
-                                    placeholder="20.000" 
+                                    placeholder="Exemplo: 20000" 
                                     type="number" 
                                     className="pl-10"
-                                    {...field} 
+                                    value={field.value || ""}
                                     onChange={(e) => {
-                                      const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                      const value = e.target.value === "" ? undefined : Number(e.target.value);
                                       field.onChange(value);
                                     }}
                                   />
@@ -255,11 +255,11 @@ const Calculator = () => {
                               <FormLabel>Quantas vendas ou conversões por mês sua empresa realiza?</FormLabel>
                               <FormControl>
                                 <Input 
-                                  placeholder="Você pode usar uma estimativa ou valor médio mensal" 
+                                  placeholder="Informe o número médio mensal" 
                                   type="number" 
-                                  {...field} 
+                                  value={field.value || ""}
                                   onChange={(e) => {
-                                    const value = e.target.value === "" ? undefined : e.target.valueAsNumber;
+                                    const value = e.target.value === "" ? undefined : Number(e.target.value);
                                     field.onChange(value);
                                   }}
                                 />
