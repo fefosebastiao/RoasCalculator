@@ -136,13 +136,14 @@ const EducationalSection = () => {
                   </div>
                 </div>
               </CardContent>
-              <div className="relative h-64 md:h-auto">
-                <div className="h-full bg-white flex items-center justify-center p-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Análise de dados de marketing" 
-                    className="max-w-full h-auto rounded-lg shadow-md object-cover"
-                  />
+              <div className="hidden md:block bg-primary-50 flex items-center justify-center p-4">
+                <div className="p-6 md:p-8 flex flex-col justify-center">
+                  <div className="mb-3 rounded-full bg-primary-100 h-12 w-12 flex items-center justify-center">
+                    <BarChart2Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <p className="text-gray-700 font-medium">
+                    Tome decisões baseadas em dados concretos e aumente seu retorno sobre investimento em anúncios.
+                  </p>
                 </div>
               </div>
             </div>
