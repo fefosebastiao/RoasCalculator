@@ -436,41 +436,49 @@ const Calculator = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <Card className="shadow-sm bg-white border-l-4 border-primary">
-                  <CardContent className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Seu ROAS</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.roas.toFixed(2)}x</div>
-                  </CardContent>
-                </Card>
-                <Card className="shadow-sm bg-white border-l-4 border-gray-400">
-                  <CardContent className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Benchmark do Setor</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.benchmark.toFixed(2)}x</div>
-                  </CardContent>
-                </Card>
-                <Card className="shadow-sm bg-white border-l-4 border-gray-400">
-                  <CardContent className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Em Relação ao Benchmark</h4>
-                    <div className="text-2xl font-bold text-gray-900">{results.percentOfBenchmark.toFixed(2).replace(/\.00$/, ".00")}%</div>
-                  </CardContent>
-                </Card>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                <Card className="shadow-sm bg-white border-l-4 border-blue-400">
-                  <CardContent className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Ticket Médio</h4>
-                    <div className="text-2xl font-bold text-gray-900">R$ {results.ticketMedio.toFixed(2)}</div>
-                  </CardContent>
-                </Card>
-                <Card className="shadow-sm bg-white border-l-4 border-blue-400">
-                  <CardContent className="p-4">
-                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Custo por Aquisição (CPA)</h4>
-                    <div className="text-2xl font-bold text-gray-900">R$ {results.cpa.toFixed(2)}</div>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="shadow-sm bg-white mb-10">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-bold text-gray-800 mb-4">Resultados da Análise</h3>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-10 gap-y-6">
+                    {/* ROAS e Benchmark */}
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-600 mb-1">ROAS</h4>
+                        <div className="flex items-baseline">
+                          <span className="text-2xl font-bold text-gray-900 mr-2">{results.roas.toFixed(2)}x</span>
+                          <span className="text-sm text-gray-500">
+                            (Meta: {results.benchmark.toFixed(2)}x)
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                          <div 
+                            className={`h-1.5 rounded-full ${results.roas >= results.benchmark ? 'bg-green-500' : 'bg-amber-500'}`}
+                            style={{ width: `${results.percentOfBenchmark}%` }}
+                          ></div>
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {results.percentOfBenchmark.toFixed(2)}% da meta do setor
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Ticket Médio */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-600 mb-1">Ticket Médio</h4>
+                      <div className="text-2xl font-bold text-gray-900">R$ {results.ticketMedio.toFixed(2)}</div>
+                      <p className="text-xs text-gray-500 mt-1">Valor médio por venda</p>
+                    </div>
+                    
+                    {/* CPA */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-600 mb-1">Custo por Aquisição</h4>
+                      <div className="text-2xl font-bold text-gray-900">R$ {results.cpa.toFixed(2)}</div>
+                      <p className="text-xs text-gray-500 mt-1">Investimento por cliente adquirido</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
               <Card className="mb-8 shadow-md">
                 <CardContent className="p-6">
