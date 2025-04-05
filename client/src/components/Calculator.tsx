@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 import { calculatorSchema, CalculatorFormData, CalculatorResults } from "@shared/schema";
 import { industryOptions } from "@/data/industryBenchmarks";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 import {
   Form,
@@ -43,14 +42,6 @@ const Calculator = () => {
       adSpend: undefined,
       revenue: undefined
     },
-    // Personalização das mensagens de erro padrão
-    shouldUseNativeValidation: false,
-    mode: "onChange",
-    criteriaMode: "all",
-    // Substituir mensagens de erro padrão
-    context: {
-      errorMap: () => ({ message: "Insira um valor válido" })
-    }
   });
 
   const calculateRoasMutation = useMutation({
@@ -341,209 +332,152 @@ const Calculator = () => {
             {/* Results Display */}
             <Card className="bg-gray-50 shadow-lg">
               <CardContent className="p-6 md:p-8 flex flex-col justify-center">
-                <AnimatePresence mode="wait">
-                  {!results ? (
-                    <motion.div 
-                      key="placeholder"
-                      className="text-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <div className="rounded-lg mx-auto mb-6 shadow-md bg-white h-48 flex flex-col p-3">
-                        {/* Dashboard Header */}
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="text-sm font-semibold text-gray-900">Dashboard de ROAS</div>
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                            <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                            <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                {!results ? (
+                  <div className="text-center">
+                    <div className="rounded-lg mx-auto mb-6 shadow-md bg-white h-48 flex flex-col p-3">
+                      {/* Dashboard Header */}
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="text-sm font-semibold text-gray-900">Dashboard de ROAS</div>
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                          <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Main Dashboard */}
+                      <div className="flex flex-1 space-x-2">
+                        {/* Left side - KPIs */}
+                        <div className="w-1/3 flex flex-col space-y-2">
+                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
+                            <div className="text-[10px] text-gray-500">ROAS Médio</div>
+                            <div className="text-primary font-bold text-xl">3.2x</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
+                            <div className="text-[10px] text-gray-500">Conversão</div>
+                            <div className="text-primary font-bold text-xl">4.7%</div>
                           </div>
                         </div>
                         
-                        {/* Main Dashboard */}
-                        <div className="flex flex-1 space-x-2">
-                          {/* Left side - KPIs */}
-                          <div className="w-1/3 flex flex-col space-y-2">
-                            <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                              <div className="text-[10px] text-gray-500">ROAS Médio</div>
-                              <div className="text-primary font-bold text-xl">3.2x</div>
-                            </div>
-                            <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                              <div className="text-[10px] text-gray-500">Conversão</div>
-                              <div className="text-primary font-bold text-xl">4.7%</div>
-                            </div>
+                        {/* Right side - Chart */}
+                        <div className="w-2/3 bg-gray-50 rounded-md p-2 flex flex-col">
+                          <div className="text-[10px] text-gray-500 mb-1">Evolução do ROAS</div>
+                          <div className="flex-1 flex items-end pt-2 relative">
+                            {/* Barras */}
+                            <div className="h-30% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
+                            <div className="h-40% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
+                            <div className="h-35% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
+                            <div className="h-60% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
+                            <div className="h-75% w-1/6 bg-primary-500 rounded-t-sm mx-0.5"></div>
+                            <div className="h-90% w-1/6 bg-primary-600 rounded-t-sm mx-0.5"></div>
+                            
+                            {/* Linha de evolução do ROAS */}
+                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                              <polyline
+                                points="8,70 25,60 41,65 58,40 75,25 92,10"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                className="text-primary-600"
+                              />
+                              {/* Pontos da linha */}
+                              <circle cx="8" cy="70" r="2" className="fill-primary-600" />
+                              <circle cx="25" cy="60" r="2" className="fill-primary-600" />
+                              <circle cx="41" cy="65" r="2" className="fill-primary-600" />
+                              <circle cx="58" cy="40" r="2" className="fill-primary-600" />
+                              <circle cx="75" cy="25" r="2" className="fill-primary-600" />
+                              <circle cx="92" cy="10" r="2" className="fill-primary-600" />
+                            </svg>
                           </div>
-                          
-                          {/* Right side - Chart */}
-                          <div className="w-2/3 bg-gray-50 rounded-md p-2 flex flex-col">
-                            <div className="text-[10px] text-gray-500 mb-1">Evolução do ROAS</div>
-                            <div className="flex-1 flex items-end pt-2 relative">
-                              {/* Barras */}
-                              <div className="h-30% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                              <div className="h-40% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                              <div className="h-35% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                              <div className="h-60% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
-                              <div className="h-75% w-1/6 bg-primary-500 rounded-t-sm mx-0.5"></div>
-                              <div className="h-45% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
-                              
-                              {/* Linha de base */}
-                              <div className="absolute bottom-0 w-full h-px bg-gray-300"></div>
-                            </div>
+                          <div className="flex text-[8px] text-gray-400 pt-1 justify-between px-1">
+                            <span>Jan</span>
+                            <span>Fev</span>
+                            <span>Mar</span>
+                            <span>Abr</span>
+                            <span>Mai</span>
+                            <span>Jun</span>
                           </div>
                         </div>
                       </div>
-                      
-                      <p className="text-gray-500 mb-2">
-                        Preencha o formulário para calcular o ROAS do seu negócio
-                      </p>
-                      
-                      <div className="text-sm text-gray-600 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                        <p className="font-medium mb-2 text-blue-800">O que é ROAS?</p>
-                        <p>ROAS (Return on Ad Spend) é uma métrica que mede o retorno do investimento em publicidade. Um ROAS de 4x significa que para cada R$1 investido em anúncios, você obtém R$4 em receita.</p>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="results"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <motion.div 
-                        className="text-center mb-8"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                      >
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">Seu Resultado de ROAS</h3>
-                        <div className="relative inline-flex">
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="h-32 w-32 rounded-full border-8 border-primary-100 flex items-center justify-center">
-                              <motion.span 
-                                className="text-4xl font-bold text-primary"
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ 
-                                  type: "spring",
-                                  stiffness: 260,
-                                  damping: 20,
-                                  delay: 0.5
-                                }}
-                              >
-                                {results.roas.toFixed(1)}x
-                              </motion.span>
-                            </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-3">Descubra o potencial do seu ROAS</h3>
+                    <p className="text-gray-600 mb-6">Preencha o formulário ao lado para calcular seu ROAS atual e receber insights personalizados para melhorar seus resultados.</p>
+                    <div className="flex items-center justify-center text-sm text-gray-500">
+                      <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                      <span>Seus dados estão seguros e não são compartilhados</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-center mb-8">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">Seu Resultado de ROAS</h3>
+                      <div className="relative inline-flex">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="h-32 w-32 rounded-full border-8 border-primary-100 flex items-center justify-center">
+                            <span className="text-4xl font-bold text-primary">
+                              {results.roas.toFixed(1)}x
+                            </span>
                           </div>
-                          <svg className="h-32 w-32 transform -rotate-90" viewBox="0 0 100 100">
-                            <circle className="text-gray-200" strokeWidth="8" stroke="currentColor" fill="transparent" r="46" cx="50" cy="50" />
-                            <motion.circle 
-                              className="text-primary" 
-                              strokeWidth="8" 
-                              stroke="currentColor" 
-                              fill="transparent" 
-                              r="46" 
-                              cx="50" 
-                              cy="50" 
-                              strokeDasharray="289.02" 
-                              initial={{ strokeDashoffset: 289.02 }}
-                              animate={{ 
-                                strokeDashoffset: 289.02 - (Math.min(results.roas, 6) / 6) * 289.02 
-                              }}
-                              transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
-                            />
-                          </svg>
                         </div>
-                      </motion.div>
-                      
-                      <motion.div 
-                        className="bg-white rounded-lg p-4 mb-6 border border-gray-200"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-gray-700">Benchmark do setor:</span>
-                          <span className="font-semibold">{results.benchmark.toFixed(1)}x</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <motion.div 
-                            className="h-full bg-primary"
-                            initial={{ width: "0%" }}
-                            animate={{ width: `${results.percentOfBenchmark}%` }}
-                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        <svg className="h-32 w-32 transform -rotate-90" viewBox="0 0 100 100">
+                          <circle className="text-gray-200" strokeWidth="8" stroke="currentColor" fill="transparent" r="46" cx="50" cy="50" />
+                          <circle 
+                            className="text-primary" 
+                            strokeWidth="8" 
+                            stroke="currentColor" 
+                            fill="transparent" 
+                            r="46" 
+                            cx="50" 
+                            cy="50" 
+                            strokeDasharray="289.02" 
+                            strokeDashoffset={289.02 - (Math.min(results.roas, 6) / 6) * 289.02} 
                           />
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-lg p-4 mb-6 border border-gray-200">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-700">Benchmark do setor:</span>
+                        <span className="font-semibold">{results.benchmark.toFixed(1)}x</span>
+                      </div>
+                      <Progress value={results.percentOfBenchmark} className="h-2" />
+                      <div className="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>Abaixo da média</span>
+                        <span>Acima da média</span>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-primary-50 border border-primary-100 rounded-lg p-4 mb-6">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <LightbulbIcon className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="flex justify-between text-xs text-gray-500 mt-1">
-                          <span>Abaixo da média</span>
-                          <span>Acima da média</span>
-                        </div>
-                      </motion.div>
-                      
-                      <motion.div 
-                        className="bg-primary-50 border border-primary-100 rounded-lg p-4 mb-6"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.7 }}
-                      >
-                        <div className="flex">
-                          <motion.div 
-                            className="flex-shrink-0"
-                            initial={{ rotate: -45, opacity: 0 }}
-                            animate={{ rotate: 0, opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 1.0 }}
-                          >
-                            <LightbulbIcon className="h-5 w-5 text-primary" />
-                          </motion.div>
-                          <div className="ml-3">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <h4 className="text-sm font-medium text-primary-800">Análise personalizada</h4>
-                              <motion.span 
-                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 1.1 }}
-                              >
-                                AI
-                              </motion.span>
-                            </div>
-                            <motion.p 
-                              className="mt-1 text-sm text-primary-700 whitespace-pre-line"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ duration: 1, delay: 1.2 }}
-                            >
-                              {results.analysis}
-                            </motion.p>
+                        <div className="ml-3">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <h4 className="text-sm font-medium text-primary-800">Análise personalizada</h4>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                              AI
+                            </span>
                           </div>
+                          <p className="mt-1 text-sm text-primary-700 whitespace-pre-line">
+                            {results.analysis}
+                          </p>
                         </div>
-                      </motion.div>
-                      
-                      <motion.div 
-                        className="text-center"
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 1.4 }}
-                      >
-                        <Button className="inline-flex items-center justify-center">
-                          Fale com um especialista
-                          <motion.div
-                            initial={{ x: -5 }}
-                            animate={{ x: 0 }}
-                            transition={{
-                              repeat: Infinity,
-                              repeatType: "mirror",
-                              duration: 0.8,
-                              delay: 1.8
-                            }}
-                          >
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                          </motion.div>
-                        </Button>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <Button className="inline-flex items-center justify-center">
+                        Fale com um especialista
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>
