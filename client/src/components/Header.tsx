@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import infinitePayLogo from "../assets/infinitepay-logo.png";
+import logoSvg from "../assets/logo.svg";
 
 const Header = () => {
   return (
@@ -11,10 +11,11 @@ const Header = () => {
             <Link href="/">
               <div className="flex items-center">
                 <img 
-                  src={infinitePayLogo} 
+                  src={logoSvg} 
                   alt="InfinitePay" 
                   className="h-10" 
                 />
+                <span className="ml-2 font-semibold text-[#1A3353]">InfinitePay</span>
               </div>
             </Link>
           </div>
