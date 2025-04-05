@@ -80,6 +80,33 @@ const Calculator = () => {
       calculateRoasMutation.mutate(data);
     }
   };
+  
+  // Função para permitir o avanço com botões independente do submit do formulário
+  const handleNext = () => {
+    const currentFieldName = getCurrentFieldName();
+    const value = form.getValues(currentFieldName);
+    
+    // Verifica se o campo atual é válido
+    if (value) {
+      nextStep();
+    } else {
+      // Disparar validação do campo atual manualmente
+      form.trigger(currentFieldName);
+    }
+  };
+  
+  // Função auxiliar para obter o nome do campo atual com base no passo
+  const getCurrentFieldName = (): keyof CalculatorFormData => {
+    switch (step) {
+      case 1: return "industry";
+      case 2: return "monthlySales";
+      case 3: return "averageSaleValue";
+      case 4: return "monthlyLeads";
+      case 5: return "adSpend";
+      case 6: return "revenue";
+      default: return "industry";
+    }
+  };
 
   return (
     <section id="calculator" className="py-16 bg-white">
@@ -268,28 +295,34 @@ const Calculator = () => {
                         <div></div>
                       )}
                       
-                      <Button 
-                        type="submit" 
-                        disabled={calculateRoasMutation.isPending}
-                        className="space-x-2"
-                      >
-                        {calculateRoasMutation.isPending ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            <span>Calculando...</span>
-                          </>
-                        ) : step < totalSteps ? (
-                          <>
-                            <span>Próximo</span>
-                            <ChevronRight className="h-4 w-4" />
-                          </>
-                        ) : (
-                          <>
-                            <span>Calcular meu ROAS</span>
-                            <ChevronRight className="h-4 w-4" />
-                          </>
-                        )}
-                      </Button>
+                      {step < totalSteps ? (
+                        <Button 
+                          type="button" 
+                          onClick={handleNext}
+                          className="space-x-2"
+                        >
+                          <span>Próximo</span>
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      ) : (
+                        <Button 
+                          type="submit" 
+                          disabled={calculateRoasMutation.isPending}
+                          className="space-x-2"
+                        >
+                          {calculateRoasMutation.isPending ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              <span>Calculando...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>Calcular meu ROAS</span>
+                              <ChevronRight className="h-4 w-4" />
+                            </>
+                          )}
+                        </Button>
+                      )}
                     </div>
                   </form>
                 </Form>
