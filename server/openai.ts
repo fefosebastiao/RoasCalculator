@@ -12,10 +12,9 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
   
   // Prompt formatado para obter uma análise mais completa
   const prompt = `
-    Você é um analista especializado em marketing digital para a empresa InfinitePay. 
-    
-    Analise os seguintes dados de uma empresa e forneça insights detalhados sobre seu desempenho:
-    
+    Você é um experiente profissional de finanças, especializado em análise de negócios e estratégia financeira. Sua tarefa é analisar os dados financeiros fornecidos pelo usuário e fornecer insights valiosos para ajudá-lo a entender melhor seu negócio, avaliar o retorno sobre o investimento em publicidade (ROAS) e tomar decisões mais estratégicas.
+
+    Os dados financeiros fornecidos pelo usuário são:    
     - Setor da empresa: ${industry}
     - Tipo de negócio: ${serviceOrProduct} (service = serviços, product = produtos, both = ambos, none = não emite notas)
     - Investimento mensal em anúncios: R$ ${adSpend}
@@ -46,7 +45,9 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
        - O setor de atuação
        - Oportunidades de otimização baseadas nas métricas
     
-    Mantenha a análise concisa, prática e específica para o setor.
+    Mantenha a análise concisa, prática e específica para o setor. Não mencione a empresa InfinityPay ou qualquer outra empresa específica.
+
+    Output não deve conter markdown ou formatação especial.
   `;
 
   try {
