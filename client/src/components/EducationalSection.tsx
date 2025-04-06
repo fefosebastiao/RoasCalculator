@@ -103,10 +103,8 @@ const EducationalSection = () => {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="h-6 w-6 rounded-full bg-primary-100 flex items-center justify-center">
-                        <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 20v-6M6 20V10M18 20V4" />
-                        </svg>
+                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
+                        <BarChart2Icon className="h-5 w-5 text-primary" />
                       </div>
                     </div>
                     <div className="ml-3">
@@ -116,8 +114,8 @@ const EducationalSection = () => {
                   </div>
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="h-6 w-6 rounded-full bg-primary-100 flex items-center justify-center">
-                        <LightbulbIcon className="h-4 w-4 text-primary" />
+                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
+                        <LightbulbIcon className="h-5 w-5 text-primary" />
                       </div>
                     </div>
                     <div className="ml-3">
@@ -127,8 +125,8 @@ const EducationalSection = () => {
                   </div>
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="h-6 w-6 rounded-full bg-primary-100 flex items-center justify-center">
-                        <TargetIcon className="h-4 w-4 text-primary" />
+                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
+                        <TargetIcon className="h-5 w-5 text-primary" />
                       </div>
                     </div>
                     <div className="ml-3">
@@ -138,12 +136,15 @@ const EducationalSection = () => {
                   </div>
                 </div>
               </CardContent>
-              <div className="bg-primary-50 flex items-center justify-center p-4">
-                <div className="p-6 md:p-8 flex flex-col justify-center items-center text-center">
-                  <div className="mb-5 rounded-full bg-primary-100 h-16 w-16 flex items-center justify-center">
-                    <BarChart2Icon className="h-8 w-8 text-primary" />
+              <div className="bg-primary-50 p-6 md:p-8 flex items-center justify-center">
+                <div className="flex flex-col items-center text-center max-w-sm">
+                  <div className="mb-5 rounded-full bg-primary-100/80 h-20 w-20 flex items-center justify-center">
+                    <BarChart2Icon className="h-10 w-10 text-primary" />
                   </div>
-                  <p className="text-gray-700 font-medium max-w-md">
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">
+                    Maximize seu ROI
+                  </h3>
+                  <p className="text-gray-700">
                     Tome decisões baseadas em dados concretos e aumente seu retorno sobre investimento em anúncios.
                   </p>
                 </div>
