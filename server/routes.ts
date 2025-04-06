@@ -35,7 +35,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // API endpoint for calculating ROAS without saving a lead (versão otimizada)
+  // API endpoint for calculating ROAS without saving a lead
   app.post("/api/calculate-roas", async (req, res) => {
     try {
       // Validate the request body
@@ -65,7 +65,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const benchmark = industryBenchmarks[validatedData.industry] || 3.5;
       
-      // Generate basic analysis instantly
+      // Generate basic analysis (fallback if OpenAI fails)
       let basicAnalysis = "";
       if (roas < benchmark * 0.8) {
         basicAnalysis = `Seu ROAS está abaixo da média para o setor (${benchmark.toFixed(1)}x). Considere revisar suas estratégias de segmentação e criativo para melhorar a eficiência.`;
@@ -78,15 +78,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // 4. Calculate percentage of benchmark (for the indicator)
       const percentOfBenchmark = Math.min(Math.max((roas / benchmark) * 100, 5), 100);
       
-      // Retornar imediatamente com análise básica
-      res.json({
-        roas,
-        benchmark,
-        percentOfBenchmark,
-        ticketMedio,
-        cpa,
-        analysis: basicAnalysis
-      });
+      // 5. Generate AI-powered personalized analysis
+      try {
+        // Create data object for OpenAI
+        const analysisData = {
+          ...validatedData,
+          roas,
+          benchmark,
+          ticketMedio,
+          cpa,
+          monthlySales: validatedData.monthlySales,
+          serviceOrProduct: validatedData.serviceOrProduct
+        };
+        
+        // Get AI analysis
+        const aiAnalysis = await generateROASAnalysis(analysisData);
+        
+        res.json({
+          roas,
+          benchmark,
+          percentOfBenchmark,
+          ticketMedio,
+          cpa,
+          analysis: aiAnalysis || basicAnalysis
+        });
+      } catch (aiError) {
+        console.error("Error generating AI analysis:", aiError);
+        // Fallback to basic analysis if AI fails
+        res.json({
+          roas,
+          benchmark,
+          percentOfBenchmark,
+          ticketMedio,
+          cpa,
+          analysis: basicAnalysis
+        });
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
