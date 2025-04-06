@@ -8,6 +8,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   createLead(lead: InsertLead): Promise<Lead>;
+  getAllLeads(): Promise<Lead[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -42,9 +43,29 @@ export class MemStorage implements IStorage {
   
   async createLead(insertLead: InsertLead): Promise<Lead> {
     const id = this.currentLeadId++;
-    const lead: Lead = { ...insertLead, id };
+    
+    // Garantir que todos os campos opcionais tenham valores adequados
+    const lead: Lead = { 
+      id,
+      email: insertLead.email,
+      name: insertLead.name || null,
+      phone: insertLead.phone || null,
+      adSpend: insertLead.adSpend,
+      revenue: insertLead.revenue,
+      monthlySales: insertLead.monthlySales || null,
+      serviceOrProduct: insertLead.serviceOrProduct || null,
+      industry: insertLead.industry,
+      channel: insertLead.channel,
+      calculatedRoas: insertLead.calculatedRoas,
+      createdAt: insertLead.createdAt
+    };
+    
     this.leads.set(id, lead);
     return lead;
+  }
+
+  async getAllLeads(): Promise<Lead[]> {
+    return Array.from(this.leads.values());
   }
 }
 
