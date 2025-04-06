@@ -66,16 +66,12 @@ const WhatsAppForm = ({ calculatorData, calculatorResults }: WhatsAppFormProps =
         // Formatar o número de telefone para garantir que ele comece com o código do país
         const phone = data.phone.startsWith("55") ? data.phone : `55${data.phone}`;
         
-        // Criar mensagem personalizada
-        let message = `Olá! Meu nome é ${data.name} e estou interessado em saber mais sobre as soluções de ROAS.`;
+        // Criar mensagem personalizada - versão mais curta
+        let message = `Olá! Meu nome é ${data.name} e gostaria de mais informações.`;
         
-        // Adicionar informações do cálculo se disponível
+        // Adicionar informações do cálculo se disponível - versão compacta
         if (calculatorResults) {
-          message += `\n\nMeus resultados do cálculo:
-- ROAS: ${calculatorResults.roas.toFixed(2)}x
-- Benchmark do setor: ${calculatorResults.benchmark.toFixed(2)}x
-- Ticket Médio: R$ ${calculatorResults.ticketMedio.toFixed(2)}
-- CPA: R$ ${calculatorResults.cpa.toFixed(2)}`;
+          message += ` ROAS: ${calculatorResults.roas.toFixed(2)}x`;
         }
         
         // Construir URL do WhatsApp com o número e a mensagem
