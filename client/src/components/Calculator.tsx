@@ -349,74 +349,59 @@ const Calculator = ({ onResultsShow, onCalculatorReset }: CalculatorProps) => {
               <Card className="bg-gray-50 shadow-lg">
                 <CardContent className="p-6 md:p-8 flex flex-col justify-center">
                   <div className="text-center">
-                    <div className="rounded-lg mx-auto mb-6 shadow-md bg-white h-48 flex flex-col p-3">
-                      {/* Dashboard Header */}
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="text-sm font-semibold text-gray-900">Dashboard de ROAS</div>
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                          <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                          <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                        </div>
-                      </div>
-                      
-                      {/* Main Dashboard */}
-                      <div className="flex flex-1 space-x-2">
-                        {/* Left side - KPIs */}
-                        <div className="w-1/3 flex flex-col space-y-2">
-                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                            <div className="text-[10px] text-gray-500">ROAS Médio</div>
-                            <div className="text-primary font-bold text-xl">3.2x</div>
-                          </div>
-                          <div className="bg-gray-50 rounded-md p-2 flex-1 flex flex-col justify-center">
-                            <div className="text-[10px] text-gray-500">Conversão</div>
-                            <div className="text-primary font-bold text-xl">4.7%</div>
-                          </div>
-                        </div>
-                        
-                        {/* Right side - Chart */}
-                        <div className="w-2/3 bg-gray-50 rounded-md p-2 flex flex-col">
-                          <div className="text-[10px] text-gray-500 mb-1">Evolução do ROAS</div>
-                          <div className="flex-1 flex items-end pt-2 relative">
-                            {/* Barras */}
-                            <div className="h-30% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-40% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-35% w-1/6 bg-primary-300 rounded-t-sm mx-0.5"></div>
-                            <div className="h-60% w-1/6 bg-primary-400 rounded-t-sm mx-0.5"></div>
-                            <div className="h-75% w-1/6 bg-primary-500 rounded-t-sm mx-0.5"></div>
-                            <div className="h-90% w-1/6 bg-primary-600 rounded-t-sm mx-0.5"></div>
-                            
-                            {/* Linha de evolução do ROAS */}
-                            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                              <polyline
-                                points="8,70 25,60 41,65 58,40 75,25 92,10"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                className="text-primary-600"
-                              />
-                              {/* Pontos da linha */}
-                              <circle cx="8" cy="70" r="2" className="fill-primary-600" />
-                              <circle cx="25" cy="60" r="2" className="fill-primary-600" />
-                              <circle cx="41" cy="65" r="2" className="fill-primary-600" />
-                              <circle cx="58" cy="40" r="2" className="fill-primary-600" />
-                              <circle cx="75" cy="25" r="2" className="fill-primary-600" />
-                              <circle cx="92" cy="10" r="2" className="fill-primary-600" />
-                            </svg>
-                          </div>
-                          <div className="flex text-[8px] text-gray-400 pt-1 justify-between px-1">
-                            <span>Jan</span>
-                            <span>Fev</span>
-                            <span>Mar</span>
-                            <span>Abr</span>
-                            <span>Mai</span>
-                            <span>Jun</span>
-                          </div>
-                        </div>
+                    <div className="flex justify-center mb-8">
+                      <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
+                        <svg 
+                          className="w-12 h-12 text-primary" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <path d="M3 3v18h18"></path>
+                          <path d="m19 9-5 5-4-4-3 3"></path>
+                        </svg>
                       </div>
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-3">Descubra o potencial do seu ROAS</h3>
                     <p className="text-gray-600 mb-6">Preencha o formulário ao lado para calcular seu ROAS atual e receber insights personalizados para melhorar seus resultados.</p>
+                    <div className="flex flex-col gap-4 mb-6">
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                          <svg className="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                        </div>
+                        <div className="text-left">
+                          <span className="text-gray-700 font-medium">Diagnóstico preciso de seus investimentos</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                          <svg className="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                        </div>
+                        <div className="text-left">
+                          <span className="text-gray-700 font-medium">Comparação com benchmarks do seu setor</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                          <svg className="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                        </div>
+                        <div className="text-left">
+                          <span className="text-gray-700 font-medium">Insights personalizados com IA avançada</span>
+                        </div>
+                      </div>
+                    </div>
                     <div className="flex items-center justify-center text-sm text-gray-500">
                       <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
