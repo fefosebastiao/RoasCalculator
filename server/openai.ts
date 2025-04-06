@@ -6,6 +6,24 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // Configuração da instância de backup de OpenAI
 const backupOpenai = new OpenAI({ apiKey: process.env.OPENAI_BACKUP_API_KEY });
 
+// Função para formatar o texto da resposta:
+// 1. Remove os caracteres # e -
+// 2. Transforma textos entre ** em negrito (mantendo o conteúdo)
+function formatarRespostaAI(texto: string): string {
+  if (!texto) return "";
+  
+  // Substitui asteriscos duplos por tags de negrito
+  let textoFormatado = texto.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Remove caracteres # (que definem títulos em Markdown)
+  textoFormatado = textoFormatado.replace(/^#+\s+/gm, '');
+  
+  // Remove marcadores de lista (- e *)
+  textoFormatado = textoFormatado.replace(/^[-*]\s+/gm, '');
+  
+  return textoFormatado;
+}
+
 export async function generateROASAnalysis(formData: any): Promise<string> {
   const { industry, adSpend, revenue, monthlySales, serviceOrProduct, ticketMedio, cpa, benchmark } = formData;
   const roas = revenue / adSpend;
@@ -47,6 +65,8 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
        - Oportunidades de otimização baseadas nas métricas
     
     Mantenha a análise concisa, prática e específica para o setor.
+    
+    IMPORTANTE: Para destacar termos importantes, use asteriscos duplos como este: **termo importante**. Não use marcadores markdown como # ou -.
   `;
 
   try {
@@ -64,7 +84,9 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
         max_tokens: 700
       });
       
-      return response.choices[0].message.content || gerarAnaliseBasica(roas);
+      const resposta = response.choices[0].message.content || gerarAnaliseBasica(roas);
+      return formatarRespostaAI(resposta);
+      
     } catch (error) {
       console.error("Erro ao usar chave principal da OpenAI:", error);
       
@@ -82,55 +104,55 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
         });
         
         console.log("Requisição com chave de backup bem-sucedida!");
-        return backupResponse.choices[0].message.content || gerarAnaliseBasica(roas);
+        const resposta = backupResponse.choices[0].message.content || gerarAnaliseBasica(roas);
+        return formatarRespostaAI(resposta);
+        
       } catch (backupError) {
         console.error("Erro ao usar chave de backup da OpenAI:", backupError);
         
         // Retornar análise básica caso ambas as chaves falhem
         console.log("Ambas as chaves falharam, gerando análise básica...");
-        return gerarAnaliseBasica(roas);
+        return formatarRespostaAI(gerarAnaliseBasica(roas));
       }
     }
   } catch (generalError) {
     console.error("Erro geral na função de análise:", generalError);
-    return gerarAnaliseBasica(roas);
+    return formatarRespostaAI(gerarAnaliseBasica(roas));
   }
 }
 
 // Função para gerar uma análise básica quando ambas as chaves API falham
 function gerarAnaliseBasica(roas: number): string {
   const avaliacaoROAS = roas < 2 ? 
-    "Seu ROAS está abaixo do que é considerado viável para a maioria dos negócios." : 
+    "Seu ROAS está **abaixo do que é considerado viável** para a maioria dos negócios." : 
     roas < 4 ? 
-      "Seu ROAS está na faixa média para a maioria dos setores." : 
-      "Seu ROAS está acima da média, indicando uma boa eficiência nos investimentos em anúncios.";
+      "Seu ROAS está na **faixa média** para a maioria dos setores." : 
+      "Seu ROAS está **acima da média**, indicando uma boa eficiência nos investimentos em anúncios.";
   
   const recomendacoes = roas < 2 ? 
-    "Recomendamos revisar suas campanhas de marketing, segmentação de público e canais utilizados. Considere reduzir o investimento em canais de baixo desempenho e realoque os recursos para canais mais efetivos." : 
+    "Recomendamos revisar suas **campanhas de marketing**, segmentação de público e canais utilizados. Considere reduzir o investimento em canais de baixo desempenho e realoque os recursos para canais mais efetivos." : 
     roas < 4 ? 
-      "Para melhorar ainda mais seu ROAS, considere otimizar suas campanhas de melhor desempenho e testar novos formatos de anúncios e mensagens. Análise de concorrentes também pode revelar oportunidades." : 
-      "Para manter esse excelente desempenho, continue monitorando suas métricas e testes A/B. Considere escalar gradualmente os canais mais eficientes.";
+      "Para melhorar ainda mais seu ROAS, considere otimizar suas **campanhas de melhor desempenho** e testar novos formatos de anúncios e mensagens. Análise de concorrentes também pode revelar oportunidades." : 
+      "Para manter esse **excelente desempenho**, continue monitorando suas métricas e testes A/B. Considere escalar gradualmente os canais mais eficientes.";
   
-  return `## Análise de Desempenho de Marketing
-
-### ROAS (Retorno sobre Investimento em Anúncios)
+  return `ROAS (Retorno sobre Investimento em Anúncios)
 ${avaliacaoROAS}
 Um ROAS de ${roas.toFixed(1)}x significa que para cada R$1 investido em publicidade, você obtém R$${roas.toFixed(2)} em retorno.
 
-### Ticket Médio
-O valor do ticket médio está dentro do padrão esperado para sua categoria de negócio. Este valor pode ser utilizado para ajustar suas estratégias de upsell e cross-sell.
+Ticket Médio
+O valor do ticket médio está dentro do padrão esperado para sua categoria de negócio. Este valor pode ser utilizado para ajustar suas estratégias de **upsell** e **cross-sell**.
 
-### CPA (Custo por Aquisição)
-O custo para adquirir um novo cliente/venda está dentro de parâmetros aceitáveis considerando seu segmento de mercado. É importante relacionar este valor com sua margem média por venda para garantir rentabilidade.
+CPA (Custo por Aquisição)
+O custo para adquirir um novo cliente/venda está dentro de parâmetros aceitáveis considerando seu segmento de mercado. É importante relacionar este valor com sua **margem média por venda** para garantir rentabilidade.
 
-### Recomendações
+Recomendações
 ${recomendacoes}
 
-### Áreas potenciais para otimização:
-1. Ajuste da segmentação de público para reduzir CPA
-2. Melhoria da experiência de conversão para aumentar ticket médio
-3. Teste de diferentes formatos criativos para melhorar ROAS
-4. Otimização dos horários e dias de veiculação dos anúncios
+Áreas potenciais para otimização:
+Ajuste da segmentação de público para reduzir CPA
+Melhoria da experiência de conversão para aumentar ticket médio
+Teste de diferentes formatos criativos para melhorar ROAS
+Otimização dos horários e dias de veiculação dos anúncios
 
 Esta análise é baseada apenas nos dados fornecidos e deve ser complementada com uma avaliação mais abrangente de sua estratégia de marketing.`;
 }
