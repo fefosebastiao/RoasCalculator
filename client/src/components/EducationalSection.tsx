@@ -94,7 +94,7 @@ const EducationalSection = () => {
           </div>
           
           <Card className="mt-12 shadow-md overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <CardContent className="p-6 md:p-8 flex flex-col justify-center">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Otimize suas campanhas com dados precisos</h3>
                 <p className="text-gray-600 mb-6">
@@ -104,7 +104,9 @@ const EducationalSection = () => {
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
                       <div className="h-6 w-6 rounded-full bg-primary-100 flex items-center justify-center">
-                        <BarChart2Icon className="h-4 w-4 text-primary" />
+                        <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 20v-6M6 20V10M18 20V4" />
+                        </svg>
                       </div>
                     </div>
                     <div className="ml-3">
@@ -136,12 +138,12 @@ const EducationalSection = () => {
                   </div>
                 </div>
               </CardContent>
-              <div className="hidden md:block bg-primary-50 flex items-center justify-center p-4">
-                <div className="p-6 md:p-8 flex flex-col justify-center">
-                  <div className="mb-3 rounded-full bg-primary-100 h-12 w-12 flex items-center justify-center">
-                    <BarChart2Icon className="h-6 w-6 text-primary" />
+              <div className="bg-primary-50 flex items-center justify-center p-4">
+                <div className="p-6 md:p-8 flex flex-col justify-center items-center text-center">
+                  <div className="mb-5 rounded-full bg-primary-100 h-16 w-16 flex items-center justify-center">
+                    <BarChart2Icon className="h-8 w-8 text-primary" />
                   </div>
-                  <p className="text-gray-700 font-medium">
+                  <p className="text-gray-700 font-medium max-w-md">
                     Tome decisões baseadas em dados concretos e aumente seu retorno sobre investimento em anúncios.
                   </p>
                 </div>
