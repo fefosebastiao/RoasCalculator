@@ -70,9 +70,6 @@ const CTASection = () => {
                     Compre agora sua Maquininha
                   </a>
                 </Button>
-                <div className="mt-2 sm:mt-0">
-                  <WhatsAppForm />
-                </div>
               </div>
             </CardContent>
           </Card>
