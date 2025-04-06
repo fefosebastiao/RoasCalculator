@@ -122,6 +122,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // API endpoint para obter todos os leads
+  app.get("/api/leads", async (_req, res) => {
+    try {
+      const leads = await storage.getAllLeads();
+      res.json(leads);
+    } catch (error) {
+      console.error("Erro ao buscar leads:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // API endpoint for saving WhatsApp leads
   app.post("/api/whatsapp-leads", async (req, res) => {
     try {
