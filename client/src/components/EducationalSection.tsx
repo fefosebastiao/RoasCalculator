@@ -92,65 +92,6 @@ const EducationalSection = () => {
               </CardContent>
             </Card>
           </div>
-          
-          <Card className="mt-12 shadow-md overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <CardContent className="p-6 md:p-8 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Otimize suas campanhas com dados precisos</h3>
-                <p className="text-gray-600 mb-6">
-                  Nossa calculadora de ROAS combina seus dados com benchmarks de indústria para fornecer insights acionáveis que ajudam a otimizar sua estratégia de marketing.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
-                        <BarChart2Icon className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                    <div className="ml-3">
-                      <h4 className="text-base font-medium text-gray-800">Comparação com benchmarks</h4>
-                      <p className="mt-1 text-sm text-gray-600">Entenda como seu desempenho se compara ao de outras empresas do seu setor.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
-                        <LightbulbIcon className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                    <div className="ml-3">
-                      <h4 className="text-base font-medium text-gray-800">Recomendações personalizadas</h4>
-                      <p className="mt-1 text-sm text-gray-600">Receba sugestões estratégicas baseadas no seu ROAS atual.</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
-                        <TargetIcon className="h-5 w-5 text-primary" />
-                      </div>
-                    </div>
-                    <div className="ml-3">
-                      <h4 className="text-base font-medium text-gray-800">Definição de metas realistas</h4>
-                      <p className="mt-1 text-sm text-gray-600">Estabeleça objetivos atingíveis com base em dados concretos do seu setor.</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-              <div className="bg-primary-50 p-6 md:p-8 flex items-center justify-center">
-                <div className="flex flex-col items-center text-center max-w-sm">
-                  <div className="mb-5 rounded-full bg-primary-100/80 h-20 w-20 flex items-center justify-center">
-                    <BarChart2Icon className="h-10 w-10 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">
-                    Maximize seu ROI
-                  </h3>
-                  <p className="text-gray-700">
-                    Tome decisões baseadas em dados concretos e aumente seu retorno sobre investimento em anúncios.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Card>
         </div>
       </div>
     </section>
