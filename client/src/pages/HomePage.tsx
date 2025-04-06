@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Calculator from "@/components/Calculator";
+import EducationalSection from "@/components/EducationalSection";
 import CTASection from "@/components/CTASection";
 
 const HomePage = () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
         />
         {!isCalculatorSubmitted && (
           <>
+            <EducationalSection />
             <CTASection />
           </>
         )}
