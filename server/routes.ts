@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertLeadSchema, calculatorSchema, leadSchema } from "@shared/schema";
+import { insertLeadSchema, calculatorSchema, leadSchema, whatsAppFormSchema } from "@shared/schema";
 import { generateROASAnalysis } from "./openai";
 import { z } from "zod";
 
@@ -114,6 +114,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
           analysis: basicAnalysis
         });
       }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // API endpoint for saving WhatsApp leads
+  app.post("/api/whatsapp-leads", async (req, res) => {
+    try {
+      // Validate the request body against whatsAppFormSchema
+      const validatedData = whatsAppFormSchema.parse(req.body);
+      
+      // Extrair dados do calculador se disponíveis
+      const calculatorData = validatedData.calculatorData;
+      const calculatorResults = validatedData.calculatorResults;
+      
+      // Valores padrão para campos obrigatórios se não forem fornecidos
+      const adSpend = calculatorData?.adSpend || 0;
+      const revenue = calculatorData?.revenue || 0;
+      const industry = calculatorData?.industry || "other";
+      const monthlySales = calculatorData?.monthlySales || 0;
+      const serviceOrProduct = calculatorData?.serviceOrProduct || "";
+      const calculatedRoas = calculatorResults?.roas.toFixed(2) || "0.00";
+      
+      // Create a lead
+      const lead = await storage.createLead({
+        email: `${validatedData.name.replace(/\s+/g, '.').toLowerCase()}@whatsapp.lead`,
+        name: validatedData.name,
+        phone: validatedData.phone,
+        adSpend: adSpend,
+        revenue: revenue,
+        industry: industry,
+        monthlySales: monthlySales,
+        serviceOrProduct: serviceOrProduct,
+        channel: "whatsapp",
+        calculatedRoas: calculatedRoas,
+        createdAt: new Date().toISOString(),
+      });
+      
+      res.status(201).json(lead);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Validation error", errors: error.errors });
