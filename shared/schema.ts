@@ -11,8 +11,12 @@ export const users = pgTable("users", {
 export const leads = pgTable("leads", {
   id: serial("id").primaryKey(),
   email: text("email").notNull(),
+  name: text("name"),
+  phone: text("phone"),
   adSpend: integer("ad_spend").notNull(),
   revenue: integer("revenue").notNull(),
+  monthlySales: integer("monthly_sales"),
+  serviceOrProduct: text("service_or_product"),
   industry: text("industry").notNull(),
   channel: text("channel").notNull(),
   calculatedRoas: text("calculated_roas").notNull(),
@@ -26,8 +30,12 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export const insertLeadSchema = createInsertSchema(leads).pick({
   email: true,
+  name: true,
+  phone: true,
   adSpend: true,
   revenue: true,
+  monthlySales: true,
+  serviceOrProduct: true,
   industry: true,
   channel: true,
   calculatedRoas: true,
@@ -85,3 +93,20 @@ export type CalculatorResults = {
   // Análise personalizada
   analysis: string;
 };
+
+export const whatsAppFormSchema = z.object({
+  name: z.string().min(2, { message: "O nome deve ter pelo menos 2 caracteres" }),
+  phone: z.string().min(11, { message: "Número inválido" }).max(15),
+  // Dados opcionais do cálculo atual (se disponível)
+  calculatorData: calculatorSchema.optional(),
+  calculatorResults: z.object({
+    roas: z.number(),
+    benchmark: z.number(),
+    percentOfBenchmark: z.number(),
+    ticketMedio: z.number(),
+    cpa: z.number(),
+    analysis: z.string(),
+  }).optional(),
+});
+
+export type WhatsAppFormData = z.infer<typeof whatsAppFormSchema>;

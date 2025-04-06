@@ -536,7 +536,10 @@ const Calculator = ({ onResultsShow, onCalculatorReset }: CalculatorProps) => {
                   >
                     Calcular Novamente
                   </Button>
-                  <WhatsAppForm />
+                  <WhatsAppForm 
+                    calculatorData={form.getValues()}
+                    calculatorResults={results}
+                  />
                 </div>
                 
                 {/* Seção de CTA dentro do componente Calculator quando os resultados estão visíveis */}

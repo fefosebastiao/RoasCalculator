@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { whatsAppFormSchema, type CalculatorResults, type CalculatorFormData } from "@shared/schema";
 
 import {
   Dialog,
@@ -25,14 +28,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 
-const whatsAppFormSchema = z.object({
-  name: z.string().min(2, { message: "O nome deve ter pelo menos 2 caracteres" }),
-  phone: z.string().min(11, { message: "Número inválido" }).max(15),
-});
+type WhatsAppFormProps = {
+  calculatorData?: CalculatorFormData;
+  calculatorResults?: CalculatorResults;
+};
 
 type WhatsAppFormValues = z.infer<typeof whatsAppFormSchema>;
 
-const WhatsAppForm = () => {
+const WhatsAppForm = ({ calculatorData, calculatorResults }: WhatsAppFormProps = {}) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
@@ -44,32 +47,64 @@ const WhatsAppForm = () => {
     },
   });
 
+  // Mutation para salvar leads do WhatsApp
+  const whatsAppLeadMutation = useMutation({
+    mutationFn: async (data: WhatsAppFormValues) => {
+      const response = await apiRequest("POST", "/api/whatsapp-leads", {
+        ...data,
+        calculatorData,
+        calculatorResults,
+      });
+      return response.json();
+    },
+  });
+
   const onSubmit = (data: WhatsAppFormValues) => {
-    // Formatar o número de telefone para garantir que ele comece com o código do país
-    const phone = data.phone.startsWith("55") ? data.phone : `55${data.phone}`;
-    
-    // Criar mensagem personalizada
-    const message = encodeURIComponent(
-      `Olá! Meu nome é ${data.name} e estou interessado em saber mais sobre as soluções de ROAS.`
-    );
-    
-    // Construir URL do WhatsApp com o número e a mensagem
-    const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
-    
-    // Abrir WhatsApp em uma nova aba
-    window.open(whatsappUrl, "_blank");
-    
-    // Fechar o dialog
-    setOpen(false);
-    
-    // Exibir toast de confirmação
-    toast({
-      title: "Mensagem enviada!",
-      description: "Você será redirecionado para o WhatsApp.",
+    // Salvar lead no banco de dados
+    whatsAppLeadMutation.mutate(data, {
+      onSuccess: () => {
+        // Formatar o número de telefone para garantir que ele comece com o código do país
+        const phone = data.phone.startsWith("55") ? data.phone : `55${data.phone}`;
+        
+        // Criar mensagem personalizada
+        let message = `Olá! Meu nome é ${data.name} e estou interessado em saber mais sobre as soluções de ROAS.`;
+        
+        // Adicionar informações do cálculo se disponível
+        if (calculatorResults) {
+          message += `\n\nMeus resultados do cálculo:
+- ROAS: ${calculatorResults.roas.toFixed(2)}x
+- Benchmark do setor: ${calculatorResults.benchmark.toFixed(2)}x
+- Ticket Médio: R$ ${calculatorResults.ticketMedio.toFixed(2)}
+- CPA: R$ ${calculatorResults.cpa.toFixed(2)}`;
+        }
+        
+        // Construir URL do WhatsApp com o número e a mensagem
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        
+        // Abrir WhatsApp em uma nova aba
+        window.open(whatsappUrl, "_blank");
+        
+        // Fechar o dialog
+        setOpen(false);
+        
+        // Exibir toast de confirmação
+        toast({
+          title: "Mensagem enviada!",
+          description: "Você será redirecionado para o WhatsApp.",
+        });
+        
+        // Limpar o formulário
+        form.reset();
+      },
+      onError: (error) => {
+        console.error("Erro ao salvar lead:", error);
+        toast({
+          title: "Erro ao processar solicitação",
+          description: "Ocorreu um erro ao processar seus dados. Tente novamente.",
+          variant: "destructive",
+        });
+      }
     });
-    
-    // Limpar o formulário
-    form.reset();
   };
 
   return (
