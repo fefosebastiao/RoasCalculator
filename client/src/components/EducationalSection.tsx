@@ -7,9 +7,9 @@ const EducationalSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Entenda o poder do ROAS</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Mais retorno, menos desperdício com ROAS.</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              O Return on Ad Spend (ROAS) é um dos indicadores mais importantes para avaliar a eficácia das suas campanhas de marketing digital.
+              O Return on Ad Spend (ROAS) é um dos indicadores mais importantes para avaliar a eficácia das suas campanhas de marketing.
             </p>
           </div>
           
@@ -44,7 +44,7 @@ const EducationalSection = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Por que o ROAS importa?</h3>
                 <p className="text-gray-600">
-                  O ROAS ajuda a avaliar a eficiência de suas campanhas publicitárias e orienta decisões de orçamento. Um ROAS maior indica melhor retorno sobre investimento.
+                  O ROAS ajuda a avaliar a eficiência de suas campanhas publicitárias e orienta decisões de orçamento.
                 </p>
                 <ul className="mt-4 space-y-2">
                   <li className="flex items-start">
@@ -53,7 +53,7 @@ const EducationalSection = () => {
                   </li>
                   <li className="flex items-start">
                     <CheckIcon className="h-5 w-5 text-green-500 mt-0.5 mr-2" />
-                    <span className="text-gray-700">Otimiza alocação de orçamento</span>
+                    <span className="text-gray-700">Otimização de orçamento</span>
                   </li>
                   <li className="flex items-start">
                     <CheckIcon className="h-5 w-5 text-green-500 mt-0.5 mr-2" />

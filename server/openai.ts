@@ -29,25 +29,25 @@ export async function generateROASAnalysis(formData: any): Promise<string> {
     Por favor, forneça uma análise em português que inclua:
     
     1. ROAS (Retorno sobre investimento em anúncios):
-       - Como está o ROAS em relação ao benchmark do setor (${benchmark.toFixed(2)}x)
-       - O que este valor significa para o negócio
+       Como está o ROAS em relação ao benchmark do setor (${benchmark.toFixed(2)}x)
+       O que este valor significa para o negócio
     
     2. Ticket Médio:
-       - Se o valor é adequado para o setor
-       - Como ele impacta nas estratégias de marketing
+       Se o valor é adequado para o setor
+       Como ele impacta nas estratégias de marketing
     
     3. CPA (Custo por aquisição):
-       - Se o custo está adequado ao tipo de negócio
-       - Relação entre o CPA e a margem estimada (produto vs serviço)
+       Se o custo está adequado ao tipo de negócio
+       Relação entre o CPA e a margem estimada (produto vs serviço)
     
     4. Recomendações específicas e práticas considerando:
-       - O tipo de operação (produto ou serviço)
-       - O setor de atuação
-       - Oportunidades de otimização baseadas nas métricas
+       O tipo de operação (produto ou serviço)
+       O setor de atuação
+       Oportunidades de otimização baseadas nas métricas
     
     Mantenha a análise concisa, prática e específica para o setor. Não mencione a empresa InfinityPay ou qualquer outra empresa específica.
 
-    Output não deve conter markdown ou formatação especial.
+    Output não deve conter markdown ou formatação especial. Não use em suas respostas recursos como "##", "*", "-"
   `;
 
   try {
