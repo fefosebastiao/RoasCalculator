@@ -1,4 +1,4 @@
-# Calculadora ROAS - InfinitePay
+# Calculadora ROAS
 
 Uma calculadora avançada de ROAS (Return on Ad Spend), fornecendo análises personalizadas e insights gerados por IA para otimizar campanhas de marketing.
 
