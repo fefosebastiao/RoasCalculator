@@ -21,10 +21,10 @@ const HeroSection = () => {
           <div className="w-full">
             <div className="max-w-2xl mx-auto text-center">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                Qual o retorno real do seu investimento em anúncios?
+                Calcule o retorno do seu investimento em anúncios
               </h1>
               <p className="text-lg md:text-xl mb-8 text-primary-50">
-                Descubra seu ROAS (Return on Ad Spend) e compare com os benchmarks do seu setor para otimizar sua estratégia de marketing digital.
+                Descubra em segundos e compare com os benchmarks do seu setor para otimizar sua estratégia de marketing.
               </p>
               <Button 
                 size="lg"
@@ -40,7 +40,7 @@ const HeroSection = () => {
                 </Link>
               </Button>
               <div className="mt-8 text-sm text-primary-100">
-                <p>Obtenha uma estimativa personalizada baseada no seu orçamento e objetivos de receita, comparada com referências da sua indústria.</p>
+                <p>Estimativa inteligente com IA, baseada no seu orçamento, metas de receita e benchmarks do seu setor — com insights prontos para otimizar seus anúncios.</p>
               </div>
             </div>
           </div>
