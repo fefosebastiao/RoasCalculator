@@ -6,6 +6,8 @@ Uma calculadora avançada de ROAS (Return on Ad Spend), fornecendo análises per
 
 ## 📊 Sobre o Projeto
 
+🖇️ https://roas-calculator-fefosebastiao.replit.app/
+
 Esta aplicação web foi desenvolvida para transformar métricas de marketing em insights acionáveis. A Calculadora ROAS permite que usuários:
 
 - Calculem o ROAS (Retorno sobre Investimento em Publicidade)
@@ -31,7 +33,7 @@ Esta aplicação web foi desenvolvida para transformar métricas de marketing em
 - **Compartilhamento Simplificado**: Funcionalidade de compartilhamento via WhatsApp integrada
 - **Design Responsivo**: Experiência otimizada para todos os dispositivos
 
-## Prompt personalizado para análise financeira especializada com foco em ROAS
+## 🤖 Prompt personalizado para análise financeira especializada com foco em ROAS
 
 prompt = 
     Você é um experiente profissional de finanças, especializado em análise de negócios, estratégia financeira e ROI de marketing. Como CFO com background em marketing digital, sua tarefa é analisar os dados financeiros fornecidos pelo usuário e fornecer insights profundos para ajudá-lo a compreender a eficiência de seus investimentos em publicidade e tomar decisões estratégicas.
