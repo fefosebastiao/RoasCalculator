@@ -1,12 +1,12 @@
 # Calculadora ROAS
 
+🖇️ https://roas-calculator-fefosebastiao.replit.app/
+
 Uma calculadora avançada de ROAS (Return on Ad Spend), fornecendo análises personalizadas e insights gerados por IA para otimizar campanhas de marketing.
 
 ![Calculadora ROAS](generated-icon.png)
 
 ## 📊 Sobre o Projeto
-
-🖇️ https://roas-calculator-fefosebastiao.replit.app/
 
 Esta aplicação web foi desenvolvida para transformar métricas de marketing em insights acionáveis. A Calculadora ROAS permite que usuários:
 
